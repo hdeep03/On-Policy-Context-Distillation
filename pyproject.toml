@@ -1,0 +1,14 @@
+[project]
+name = "opcd"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chz>=0.4.0",
+    "datasets>=4.4.1",
+    "rich>=14.2.0",
+    "tinker>=0.6.3",
+    "tinker-cookbook>=0.1.0",
+    "wandb>=0.23.1",
+]
