@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from opcd.dataset.hendrycks_math import train_dataset, test_dataset, is_correct
 
@@ -31,7 +32,7 @@ class OffPolicyConfig:
     batch_size: int = 16 
     learning_rate: float = get_lr("Qwen/Qwen3-8B")
 
-def create_teacher_prompt(renderer: Renderer, sample: dict, seed: int, k: int) -> types.ModelInput:
+def create_teacher_prompt(renderer: Renderer, sample: dict, seed: int, k: int, prefill: Optional[str] = "Solution: ") -> types.ModelInput:
     system_message = [
         Message(role="system", content="You are a helpful assistant."),
     ]
@@ -48,7 +49,7 @@ def create_teacher_prompt(renderer: Renderer, sample: dict, seed: int, k: int) -
         Message(role="user", content=f"Problem: {sample['problem']}"),
     ]
     chat_messages = system_message + in_context_examples_messages + user_message
-    return renderer.build_generation_prompt(chat_messages, prefill="Solution: ")
+    return renderer.build_generation_prompt(chat_messages, prefill=prefill)
 
 def create_student_prompt(renderer: Renderer, sample: dict) -> types.ModelInput:
     messages = [
@@ -152,7 +153,7 @@ def run(config: OffPolicyConfig):
 def evaluate(sampler_path: str, config: OffPolicyConfig):
     service_client = tinker.ServiceClient()
     logger.info(f"Evaluating with sampler path: {sampler_path}")
-    sampling_client = service_client.create_sampling_client(base_model=config.student_model)
+    sampling_client = service_client.create_sampling_client(model_path=sampler_path)
     logger.info(f"Created sampling client")
     student_tokenizer = get_tokenizer(config.student_model)
     student_renderer = get_renderer(get_renderer_name(config.student_model), student_tokenizer)
