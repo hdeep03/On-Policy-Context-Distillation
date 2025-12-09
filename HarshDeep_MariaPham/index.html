@@ -418,9 +418,8 @@
 			<div class="margin-left-block">
 			</div>
 			<div class="main-content-block">
-				<h3>Dataset Used</h3>
-				We use the Hendrycks MATH dataset, a challenging benchmark of 12,500 training problems and 5,000 test problems spanning topics such as algebra, geometry, number theory, and calculus, each paired with a detailed step-by-step solution. To support our experiments, we shuffle the full training split with a fixed seed for reproducibility and draw batches from this randomized order, ensuring the student model encounters a diverse mix of problems across training. Although the dataset is large, we train on only a subset determined by our batch size and compute budget, using these varied mathematical tasks to evaluate how well on-policy context distillation strengthens the student model’s multi-step reasoning.			</div>
-			<div class="margin-right-block">
+				<h3>Dataset</h3>
+				We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test problems that span a wide range of topics including algebra, geometry, number theory, and calculus. Each problem is paired with a detailed step-by-step solution, making the dataset well suited for evaluating multi-step mathematical reasoning. In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving the student model exposure to a diverse assortment of tasks throughout the learning process. This randomized batching allows us to evaluate how effectively on-policy context distillation improves the student’s ability to reason through complex mathematical problems.			<div class="margin-right-block">
 			</div>
 		</div>
 
