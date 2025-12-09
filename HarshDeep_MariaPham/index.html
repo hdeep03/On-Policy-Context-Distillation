@@ -283,7 +283,7 @@
 				<a href="#intro">Introduction</a><br><br>
 				<a href="#prior_work">Prior work</a><br><br>
 				<a href="#experiments_and_methodology">Experiments and Methodology</a><br><br>
-				<a href="#results">Results</a><br><br>
+				<a href="#results_discussion">Results and Discussion</a><br><br>
 				<a href="#implications_and_limitations">Implications and limitations</a><br><br>
 			</div>
 		</div>
@@ -636,35 +636,33 @@
 	</div>
 
 
-	<div class="content-margin-container" id="results">
+	<div class="content-margin-container" id="results_discussion">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Results</h1>
+			<h1>Results and Discussion</h1>
 			<img src="./images/context_distillation_scaling_math.svg" width=768px />
-			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
-			We evaluate how different distillation methods scale on the Hendrycks MATH dataset as a function of both the
-			number of
-			training examples and the LoRA rank used during fine tuning. As shown in Figure 3 (top), off-policy
-			distillation
-			provides the strongest initial gains in the extremely low-data regime, reflecting the benefits of directly
-			imitating
-			high-quality teacher trajectories when only a handful of examples are available. However, its performance
-			plateaus
-			quickly and does not reach teacher-level accuracy. In contrast, on-policy distillation and context-gain
-			on-policy
-			distillation improve more rapidly as training data increases, ultimately matching or surpassing teacher
-			performance when
-			trained on 20–50 samples. The inclusion of two reference curves in this plot helps contextualize these
-			gains: the
-			Untrained Student baseline (dotted purple line) remains at approximately 25% accuracy, illustrating the
-			difficulty of
-			the task without fine-tuning, while the Teacher model (black line) provides a stable upper bound of 70–80%
-			accuracy
-			across all regimes. Together, these baselines highlight the substantial improvements achieved through
-			distillation and
-			underscore the importance of student-generated rollouts for effective context transfer.
+			We evaluate the scaling behavior of different context distillation strategies on the Hendrycks MATH dataset
+			as a function of the number of training examples as shown in <strong>Figure 3</strong>. Off-policy distillation achieves the
+			strongest performance in the extreme low-data regime, but its gains saturate quickly as additional training
+			data is introduced. This suggests that directly imitating teacher-generated trajectories is highly effective
+			when only a small number of examples are available, but yields diminishing returns as supervision increases.
 			<br><br>
+			In contrast, both on-policy and context-gain on-policy distillation exhibit slower initial improvements but
+			scale more favorably with increasing data. As the number of training examples grows, these methods
+			approach and in some cases slightly exceed the teacher’s performance when trained on 20–50 examples. This
+			trend indicates that allowing the student to generate its own trajectories during training becomes
+			increasingly important for effective context transfer as more data becomes available.
+			<br><br>
+			A possible explanation for this behavior lies in differences in distributional coverage across training
+			strategies. Off-policy distillation relies on a fixed distribution of teacher-generated trajectories, which
+			provides strong early supervision but may limit exposure to states induced by the student’s evolving policy.
+			As training progresses, this mismatch can constrain further improvement. In contrast, on-policy and
+			context-gain on-policy distillation train directly on student-generated rollouts, reducing exposure bias and
+			allowing the training distribution to adapt alongside the student, which may lead to improved scaling at
+			larger data sizes.
+			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
+
 			We further examine how performance varies with LoRA rank, which controls the expressiveness of the student’s
 			learned
 			updates. As shown in Figure 3 (bottom), both on-policy approaches benefit consistently from increased rank,
