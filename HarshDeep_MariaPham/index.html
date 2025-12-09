@@ -234,10 +234,8 @@
 				</div>
 		    <div class="main-content-block">
             <!--You can embed an image like this:-->
-            <img src="./images/your_image_here.png" width=512px/>
 		    </div>
 		    <div class="margin-right-block">
-						Caption for the image.
 		    </div>
 		</div>
 
@@ -301,7 +299,26 @@
 					<h3>On-Policy Context Distillation</h3>
 					We propose on-policy context distillation as a more stable and effective alternative to supervised fine tuning for context distillation. Rather than training the student exclusively on teacher generated data, the student actively samples trajectories from its own policy, ensuring that learning is grounded in the distribution of states the model will actually encounter during inference. For every trajectory the student produces, a stronger teacher model provides dense, per token supervision that guides the student toward higher quality reasoning and response generation.
 					This framework retains the relevance of on-policy learning, since the student directly improves on the behaviors it naturally exhibits, while also preserving the efficiency and stability of distillation. By relying on rich, token level feedback rather than the sparse and unstable rewards common in reinforcement learning, on-policy context distillation creates a more reliable and efficient training signal. The result is a training approach that brings together the strengths of on-policy learning and distillation to achieve more robust context dependent behavior without the instability often associated with reinforcement learning methods.					<br><br>
-					<img src="./images/on_policy_context_distillation.svg" width=512px/>
+			</div>
+		    <div class="margin-right-block">
+		    </div>
+		</div>
+
+		<div class="content-margin-container">
+			<div class="margin-left-block">
+			</div>
+		<div class="main-content-block">
+			<img src="./images/on_policy_context_distillation.svg" width=512px/>
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for questions with detailed context, the student model samples its own trajectories, a reward function compares the two, and importance sampling updates the student's weights based on on-policy supervision.
+		</div>
+	</div>
+
+		<div class="content-margin-container" id="experiments_and_methodology">
+				<div class="margin-left-block">
+				</div>
+		    <div class="main-content-block">
 					<h3>Context-Gain Reward Function</h3>
 					We propose a context-gain-based reward function that is more sensitive to the incremental effect of the long context. Specifically, we define the per-token reward as:
 					<br><br>
@@ -390,11 +407,10 @@
 					  <br>
 					  This reward encourages the student to preserve its base behavior while incorporating only the incremental effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the teacher and student are different models, this formulation helps isolate the contribution of the context itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that are unrelated to the contextual information.
 					  <br><br>
-					  We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and student differ in architecture or scale, and where the student’s learning capacity is constrained, such as when using low-rank LoRA adapters.
+					  We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and student differ in architecture or scale, and where the student's learning capacity is constrained, such as when using low-rank LoRA adapters.
 					  <br><br>
 			</div>
-		    <div class="margin-right-block" style="transform: translate(0%, -100%);"> <!-- you can move the margin notes up and down with translate -->
-				<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for questions with detailed context, the student model samples its own trajectories, a reward function compares the two, and importance sampling updates the student’s weights based on on-policy supervision</a>.
+		    <div class="margin-right-block">
 		    </div>
 		</div>
 
