@@ -400,11 +400,11 @@
 			We adopt an on-policy context distillation training scheme in which the student model generates trajectories
 			from its own policy, while a teacher model conditioned on a long context provides supervision on those
 			trajectories. <a href="#figure2">Figure 2</a> illustrates the overall training loop. <br><br>
-			For each input prompt, the student samples a response conditioned only on the base prompt, without access to
-			the long contextual scaffold. The resulting trajectory defines the sequence of states on which training
-			occurs. At each token position, a teacher model, given the same prompt augmented with a long
-			context—evaluates the student’s sampled tokens and provides per-token supervision. The student is then
-			updated using losses computed on these on-policy rollouts. <br><br>
+			For each input prompt, the student samples a response conditioned only on the base prompt, without access to the long
+			contextual scaffold. The resulting trajectory defines the sequence of states on which training occurs. At each token
+			position, a teacher model, given the same prompt augmented with a long context, evaluates the student’s sampled tokens
+			and provides per token supervision. The student is then updated using losses computed on these on policy rollouts.
+			<br><br>
 			Crucially, while supervision is provided by a teacher with access to additional contextual information,
 			optimization is performed over the student’s own trajectory distribution. This allows the student to
 			internalize behaviors induced by the long context while avoiding the distributional mismatch inherent to
@@ -637,15 +637,29 @@
 		</div>
 	</div>
 
-
 	<div class="content-margin-container" id="results_discussion">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
 			<h1>Results and Discussion</h1>
-			<img src="./images/context_distillation_scaling_math.svg" width=768px />
+
+			<img id = "figure3" src="./images/context_distillation_scaling_math.svg" width=768px />
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
+			dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
+			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
+			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
+			increases. Qwen3-8B is used for both the teacher and student models.
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="results_discussion">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
 			We evaluate the scaling behavior of different context distillation strategies on the Hendrycks MATH dataset
-			as a function of the number of training examples as shown in <strong>Figure 3</strong>. Off-policy distillation achieves the
+			as a function of the number of training examples as shown in  <a href="#figure3">Figure 3</a>. Off-policy distillation achieves the
 			strongest performance in the extreme low-data regime, but its gains saturate quickly as additional training
 			data is introduced. This suggests that directly imitating teacher-generated trajectories is highly effective
 			when only a small number of examples are available, but yields diminishing returns as supervision increases.
@@ -683,12 +697,7 @@
 			behaviors to
 			smaller or context-limited student models.
 		</div>
-		<div class="margin-right-block" style="transform: translateY(-40%)">
-			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
-				dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
-			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
-			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
-			increases. Qwen3-8B is used for both the teacher and student models.
+		<div class="margin-right-block">
 		</div>
 	</div>
 
