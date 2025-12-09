@@ -436,7 +436,37 @@
 			</div>
 			<div class="main-content-block">
 				<h3>Dataset</h3>
-				We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test problems that span a wide range of topics including algebra, geometry, number theory, and calculus. Each problem is paired with a detailed step-by-step solution, making the dataset well suited for evaluating multi-step mathematical reasoning. In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving the student model exposure to a diverse assortment of tasks throughout the learning process. This randomized batching allows us to evaluate how effectively on-policy context distillation improves the student’s ability to reason through complex mathematical problems.			</div>
+				We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test problems that span a wide range of topics including algebra, geometry, number theory, and calculus. Each problem is paired with a detailed step-by-step solution, making the dataset well suited for evaluating multi-step mathematical reasoning. In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving the student model exposure to a diverse assortment of tasks throughout the learning process. This randomized batching allows us to evaluate how effectively on-policy context distillation improves the student's ability to reason through complex mathematical problems.			</div>
+			<div class="margin-right-block">
+			</div>
+		</div>
+
+		<div class="content-margin-container" id="experiments_and_methodology">
+			<div class="margin-left-block">
+			</div>
+			<div class="main-content-block">
+				<h3>Implementation Details</h3>
+				All experiments share a common set of hyperparameters and training configurations. We train for approximately 468 steps
+				using a batch size of 16, corresponding to a single pass over the 7,500 training examples. The student model is
+				fine-tuned using LoRA (Low-Rank Adaptation) with a rank of 32, which provides a balance between parameter efficiency and
+				adaptation capacity. Optimization is performed using Adam, with the learning rate determined by the model architecture
+				through get_lr("Qwen/Qwen3-8B"). A linear learning rate schedule decays this value to zero over the course of training.
+				<br><br>
+				For generation, we use greedy decoding with temperature 0.0 and a maximum output length of 2,000 tokens. During
+				training, the teacher model receives k = 20 in-context examples alongside each problem, while the student receives only
+				the problem statement with no demonstrations. In the off-policy setting, teacher responses are precomputed for all 7,500
+				training problems, forming a fixed dataset for supervised fine-tuning. In contrast, all on-policy variants (on-policy,
+				delta-on-policy, and context-aware-on-policy) compute teacher log-probabilities dynamically at each training step,
+				requiring a fresh teacher query for every student-generated trajectory.
+				<br><br>
+				The loss functions differ across methods. Off-policy distillation uses standard cross-entropy loss, while all on-policy
+				methods optimize an importance-sampling objective using per-token advantages derived from teacher log-probabilities.
+				Delta-on-policy further incorporates log-probabilities from both a base student model and a short-context teacher (k =
+				0) to isolate the incremental effect of long-context information. Context-aware-on-policy introduces adaptive weighting
+				based on context relevance, using a sensitivity parameter of 2.0 and clipping relevance scores to the range [0, 2.0]. .
+				Across all experiments, both teacher and student are instantiated as Qwen/Qwen3-8B models, and we fix the training seed
+				to 42 to ensure reproducibility. Checkpoints are saved every 10 training steps, and test accuracy is evaluated at each
+				checkpoint for all on-policy methods. </div>
 			<div class="margin-right-block">
 			</div>
 		</div>
