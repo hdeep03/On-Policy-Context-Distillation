@@ -1,554 +1,743 @@
 <html>
+
 <head>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<link rel="shortcut icon" href="images/icon.ico">
-<style type="text/css">
-	body {
-		/* background-color: #f0eee6; */
-		background-color: #faf9f5;
-	}
+	<link rel="shortcut icon" href="images/icon.ico">
+	<style type="text/css">
+		body {
+			/* background-color: #f0eee6; */
+			background-color: #faf9f5;
+		}
 
-	/* Hide both math displays initially, will display based on JS detection */
-  .mathjax-mobile, .mathml-non-mobile { display: none; }
+		/* Hide both math displays initially, will display based on JS detection */
+		.mathjax-mobile,
+		.mathml-non-mobile {
+			display: none;
+		}
 
-  /* Show the MathML content by default on non-mobile devices */
-  .show-mathml .mathml-non-mobile { display: block; }
-  .show-mathjax .mathjax-mobile { display: block; }
+		/* Show the MathML content by default on non-mobile devices */
+		.show-mathml .mathml-non-mobile {
+			display: block;
+		}
 
-	.content-margin-container {
-		display: flex;
-		width: 100%; /* Ensure the container is full width */
-		justify-content: center; /* Horizontally centers the children in the container */
-		align-items: center;  /* Vertically centers the children in the container */
-	}
-	.main-content-block {
-		width: 45%; /* Change this percentage as needed */
-    	max-width: 1100px; /* Optional: Maximum width */
-		background-color: #faf9f5;
-		/* border-left: 1px solid #DDD; */
-		/* border-right: 1px solid #DDD; */
-		padding: 8px 30px;
-		/* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir"; */
-		font-family: "Iowan Old Style", serif;
-	}
-	.margin-left-block {
+		.show-mathjax .mathjax-mobile {
+			display: block;
+		}
+
+		.content-margin-container {
+			display: flex;
+			width: 100%;
+			/* Ensure the container is full width */
+			justify-content: center;
+			/* Horizontally centers the children in the container */
+			align-items: center;
+			/* Vertically centers the children in the container */
+		}
+
+		.main-content-block {
+			width: 45%;
+			/* Change this percentage as needed */
+			max-width: 1100px;
+			/* Optional: Maximum width */
+			background-color: #faf9f5;
+			/* border-left: 1px solid #DDD; */
+			/* border-right: 1px solid #DDD; */
+			padding: 8px 30px;
+			/* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir"; */
+			font-family: "Iowan Old Style", serif;
+		}
+
+		.margin-left-block {
 			font-size: 14px;
-			width: 15%; /* Change this percentage as needed */
-			max-width: 130px; /* Optional: Maximum width */
+			width: 15%;
+			/* Change this percentage as needed */
+			max-width: 130px;
+			/* Optional: Maximum width */
 			position: relative;
 			margin-left: 10px;
 			text-align: left;
 			/* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir"; */
 			font-family: "Iowan Old Style", serif;
 			padding: 5px;
-	}
-	.margin-right-block {
+		}
+
+		.margin-right-block {
 			/* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;#"Avenir"; */
 			font-family: "Iowan Old Style", serif;
 			font-size: 14px;
-			width: 15%; /* Change this percentage as needed */
-			max-width: 256px; /* Optional: Maximum width */
+			width: 15%;
+			/* Change this percentage as needed */
+			max-width: 256px;
+			/* Optional: Maximum width */
 			position: relative;
 			text-align: left;
-			padding: 10px;  /* Optional: Adds padding inside the caption */
-	}
+			padding: 10px;
+			/* Optional: Adds padding inside the caption */
+		}
 
-	img {
-			max-width: 100%; /* Make sure it fits inside the container */
+		img {
+			max-width: 100%;
+			/* Make sure it fits inside the container */
 			height: auto;
 			display: block;
 			margin: auto;
-	}
-	.my-video {
-			max-width: 100%; /* Make sure it fits inside the container */
+		}
+
+		.my-video {
+			max-width: 100%;
+			/* Make sure it fits inside the container */
 			height: auto;
 			display: block;
 			margin: auto;
-	}
-	/* Hide both video displays initially, will display based on JS detection */
-  .vid-mobile, .vid-non-mobile { display: none; }
+		}
 
-  /* Show the video content by default on non-mobile devices */
-  .show-vid-mobile .vid-mobile { display: block; }
-  .show-vid-non-mobile .vid-non-mobile { display: block; }
+		/* Hide both video displays initially, will display based on JS detection */
+		.vid-mobile,
+		.vid-non-mobile {
+			display: none;
+		}
 
-	a:link,a:visited
-	{
-		color: #0e7862; /*#1367a7;*/
-		text-decoration: none;
-	}
-	a:hover {
-		color: #24b597; /*#208799;*/
-	}
+		/* Show the video content by default on non-mobile devices */
+		.show-vid-mobile .vid-mobile {
+			display: block;
+		}
 
-	h1 {
-		font-size: 24px;
-		margin-top: 4px;
-		margin-bottom: 10px;
-	}
+		.show-vid-non-mobile .vid-non-mobile {
+			display: block;
+		}
 
-	table.header {
-    font-weight: 300;
-    font-size: 17px;
-    flex-grow: 1;
-		width: 70%;
-    max-width: calc(100% - 290px); /* Adjust according to the width of .paper-code-tab */
-	}
-	table td, table td * {
-	    vertical-align: middle;
-	    position: relative;
-	}
-	table.paper-code-tab {
-	    flex-shrink: 0;
-	    margin-left: 8px;
-	    margin-top: 8px;
-	    padding: 0px 0px 0px 8px;
-	    width: 290px;
-	    height: 150px;
-	}
+		a:link,
+		a:visited {
+			color: #0e7862;
+			/*#1367a7;*/
+			text-decoration: none;
+		}
 
-	.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
-		box-shadow:
-		        0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
-		        5px 5px 0 0px #fff, /* The second layer */
-		        5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
-		        10px 10px 0 0px #fff, /* The third layer */
-		        10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
-		margin-top: 5px;
-		margin-left: 10px;
-		margin-right: 30px;
-		margin-bottom: 5px;
-	}
+		a:hover {
+			color: #24b597;
+			/*#208799;*/
+		}
 
-	hr {
-    height: 1px; /* Sets the height of the line to 1 pixel */
-    border: none; /* Removes the default border */
-    background-color: #DDD; /* Sets the line color to black */
-  }
+		h1 {
+			font-size: 24px;
+			margin-top: 4px;
+			margin-bottom: 10px;
+		}
 
-	div.hypothesis {
-		width: 80%;
-		background-color: #EEE;
-		border: 1px solid black;
-		border-radius: 10px;
-		-moz-border-radius: 10px;
-		-webkit-border-radius: 10px;
-		font-family: Courier;
-		font-size: 18px;
-		text-align: center;
-		margin: auto;
-		padding: 16px 16px 16px 16px;
-	}
+		table.header {
+			font-weight: 300;
+			font-size: 17px;
+			flex-grow: 1;
+			width: 70%;
+			max-width: calc(100% - 290px);
+			/* Adjust according to the width of .paper-code-tab */
+		}
 
-	div.citation {
-    font-size: 0.8em;
-    background-color:#faf9f5;
-    padding: 10px;
-		height: 200px;
-  }
-
-	.fade-in-inline {
-		position: absolute;
-		text-align: center;
-		margin: auto;
-		-webkit-mask-image: linear-gradient(to right,
-																			transparent 0%,
-																			transparent 40%,
-																			black 50%,
-																			black 90%,
-																			transparent 100%);
-		mask-image: linear-gradient(to right,
-																transparent 0%,
-																transparent 40%,
-																black 50%,
-																black 90%,
-																transparent 100%);
-		-webkit-mask-size: 8000% 100%;
-		mask-size: 8000% 100%;
-		animation-name: sweepMask;
-		animation-duration: 4s;
-		animation-iteration-count: infinite;
-		animation-timing-function: linear;
-		animation-delay: -1s;
-	}
-
-	.fade-in2-inline {
-			animation-delay: 1s;
-	}
-
-	.inline-div {
+		table td,
+		table td * {
+			vertical-align: middle;
 			position: relative;
-	    display: inline-block; /* Makes both the div and paragraph inline-block elements */
-	    vertical-align: top; /* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
-	    width: 50px; /* Optional: Adds space between the div and the paragraph */
-	}
+		}
 
-</style>
+		table.paper-code-tab {
+			flex-shrink: 0;
+			margin-left: 8px;
+			margin-top: 8px;
+			padding: 0px 0px 0px 8px;
+			width: 290px;
+			height: 150px;
+		}
 
-	  <title>On-Policy Context Distillation</title>
-      <meta property="og:title" content="On-Policy Context Distillation" />
-			<meta charset="UTF-8">
-  </head>
+		.layered-paper {
+			/* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+			box-shadow:
+				0px 0px 1px 1px rgba(0, 0, 0, 0.35),
+				/* The top layer shadow */
+				5px 5px 0 0px #fff,
+				/* The second layer */
+				5px 5px 1px 1px rgba(0, 0, 0, 0.35),
+				/* The second layer shadow */
+				10px 10px 0 0px #fff,
+				/* The third layer */
+				10px 10px 1px 1px rgba(0, 0, 0, 0.35);
+			/* The third layer shadow */
+			margin-top: 5px;
+			margin-left: 10px;
+			margin-right: 30px;
+			margin-bottom: 5px;
+		}
 
-  <body>
-		<div class="content-margin-container" style="padding-top: 30px;">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block" style="display: flex; flex-direction: column; align-items: center;">
-						<table class="header" align="center" style="margin-left:auto; margin-right:auto;">
-								<tr>
-									<td colspan=4 align="center">
-										<span style="font-size: 32px; font-family: 'Iowan Old Style', serif;">On-Policy Context Distillation</span>
-									</td>
-								</tr>
-								<tr>
-										<td align="right">
-												<span style="font-size:17px"><a href="https://hdeep.dev/">Harsh Deep</a></span>
-										</td>
-										<td align="center"></td> <!-- empty cell to center the names -->
-										<td align="left">
-												<span style="font-size:17px"><a href="https://www.linkedin.com/in/mar-pham/">Maria Pham</a></span>
-										</td>
-								</tr>
-								<tr>
-									<td colspan=4 align="center"><span style="font-size:18px">Final project for 6.7960, MIT</span></td>
-								</tr>
-						</table>
-					</div>
-					<div class="margin-right-block">
-					</div>
+		hr {
+			height: 1px;
+			/* Sets the height of the line to 1 pixel */
+			border: none;
+			/* Removes the default border */
+			background-color: #DDD;
+			/* Sets the line color to black */
+		}
+
+		div.hypothesis {
+			width: 80%;
+			background-color: #EEE;
+			border: 1px solid black;
+			border-radius: 10px;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			font-family: Courier;
+			font-size: 18px;
+			text-align: center;
+			margin: auto;
+			padding: 16px 16px 16px 16px;
+		}
+
+		div.citation {
+			font-size: 0.8em;
+			background-color: #faf9f5;
+			padding: 10px;
+			height: 200px;
+		}
+
+		.fade-in-inline {
+			position: absolute;
+			text-align: center;
+			margin: auto;
+			-webkit-mask-image: linear-gradient(to right,
+					transparent 0%,
+					transparent 40%,
+					black 50%,
+					black 90%,
+					transparent 100%);
+			mask-image: linear-gradient(to right,
+					transparent 0%,
+					transparent 40%,
+					black 50%,
+					black 90%,
+					transparent 100%);
+			-webkit-mask-size: 8000% 100%;
+			mask-size: 8000% 100%;
+			animation-name: sweepMask;
+			animation-duration: 4s;
+			animation-iteration-count: infinite;
+			animation-timing-function: linear;
+			animation-delay: -1s;
+		}
+
+		.fade-in2-inline {
+			animation-delay: 1s;
+		}
+
+		.inline-div {
+			position: relative;
+			display: inline-block;
+			/* Makes both the div and paragraph inline-block elements */
+			vertical-align: top;
+			/* Aligns them at the top, you can adjust this to middle, bottom, etc., based on your needs */
+			width: 50px;
+			/* Optional: Adds space between the div and the paragraph */
+		}
+	</style>
+
+	<title>On-Policy Context Distillation</title>
+	<meta property="og:title" content="On-Policy Context Distillation" />
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<div class="content-margin-container" style="padding-top: 30px;">
+		<div class="margin-left-block">
 		</div>
-
-		<div class="content-margin-container" id="intro">
-				<div class="margin-left-block">
-          <!-- table of contents here -->
-          <div style="position:fixed; max-width:inherit; top:max(20%,120px)">
-              <b style="font-size:16px">Outline</b><br><br>
-              <a href="#intro">Introduction</a><br><br>
-              <a href="#prior_work">Prior work</a><br><br>
-              <a href="#experiments_and_methodology">Experiments and Methodology</a><br><br>
-              <a href="#results">Results</a><br><br>
-              <a href="#implications_and_limitations">Implications and limitations</a><br><br>
-          </div>
-				</div>
-		    <div class="main-content-block">
-            <!--You can embed an image like this:-->
-		    </div>
-		    <div class="margin-right-block">
-		    </div>
-		</div>
-
-    <div class="content-margin-container" id="intro">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-				<h1>Introduction</h1>
-
-				Large language models (LLMs) exhibit strong <em>in-context learning</em> abilities: when provided with demonstrations, tools, or long instructional scaffolds in the prompt, they can rapidly adapt to new tasks without any change to their parameters. While powerful, this reliance on long contexts is expensive, brittle, and often impractical in deployment. Every additional example or instruction increases inference cost and latency, and maintaining carefully engineered prompts can be cumbersome.
-
-				<br><br>
-
-				<em>Context distillation</em> addresses this problem by compressing the information contained in long prompts into a model’s weights. In context distillation, a <em>teacher</em> model is given a rich context (e.g., many-shot demonstrations), while a <em>student</em> model is trained to reproduce the teacher’s behavior using little or no context at all. The goal is to retain the benefits of in-context learning while eliminating the need to supply long prompts at inference time.
-
-				<br><br>
-			</div>
-			<div class="margin-right-block">
-			</div>
-	</div>
-
-		<div class="content-margin-container" id="intro">
-			<div class="margin-left-block">
-			</div>
-		<div class="main-content-block">
-			<img src="./images/sft_context_distillation.svg" width=512px/>
+		<div class="main-content-block" style="display: flex; flex-direction: column; align-items: center;">
+			<table class="header" align="center" style="margin-left:auto; margin-right:auto;">
+				<tr>
+					<td colspan=4 align="center">
+						<span style="font-size: 32px; font-family: 'Iowan Old Style', serif;">On-Policy Context
+							Distillation</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">
+						<span style="font-size:17px"><a href="https://hdeep.dev/">Harsh Deep</a></span>
+					</td>
+					<td align="center"></td> <!-- empty cell to center the names -->
+					<td align="left">
+						<span style="font-size:17px"><a href="https://www.linkedin.com/in/mar-pham/">Maria
+								Pham</a></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=4 align="center"><span style="font-size:18px">Final project for 6.7960, MIT</span></td>
+				</tr>
+			</table>
 		</div>
 		<div class="margin-right-block">
-			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that the student receives the teacher's output sequence as input at each step rather than using the student's own generated sequence. 
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="intro">
+		<div class="margin-left-block">
+			<!-- table of contents here -->
+			<div style="position:fixed; max-width:inherit; top:max(20%,120px)">
+				<b style="font-size:16px">Outline</b><br><br>
+				<a href="#intro">Introduction</a><br><br>
+				<a href="#prior_work">Prior work</a><br><br>
+				<a href="#experiments_and_methodology">Experiments and Methodology</a><br><br>
+				<a href="#results">Results</a><br><br>
+				<a href="#implications_and_limitations">Implications and limitations</a><br><br>
+			</div>
+		</div>
+		<div class="main-content-block">
+			<!--You can embed an image like this:-->
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="intro">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Introduction</h1>
+
+			Large language models (LLMs) exhibit strong <em>in-context learning</em> abilities: when provided with
+			demonstrations,
+			tools, or long instructional scaffolds in the prompt, they can rapidly adapt to new tasks without any change
+			to their
+			parameters. However, every additional example or instruction increases inference cost and latency.
+
+			<br><br>
+
+			<em>Context distillation</em> addresses this problem by compressing the information contained in long
+			prompts into a model’s weights. In context distillation, a <em>teacher</em> model is given a rich context
+			(e.g., many-shot demonstrations), while a <em>student</em> model is trained to reproduce the teacher’s
+			behavior using little or no context at all. The goal is to retain the benefits of in-context learning while
+			eliminating the need to supply long prompts at inference time.
+
+			<br><br>
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="intro">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<img src="./images/sft_context_distillation.svg" width=512px />
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that
+			the student receives the teacher's output sequence as input at each step rather than using the student's own
+			generated sequence.
 		</div>
 	</div>
 
 	<div class="content-margin-container" id="prior_work">
-				<div class="margin-left-block">
-				</div>
-			<div class="main-content-block">
-					<h1>Prior work</h1>
-					Most existing work on context distillation relies on supervised fine tuning (SFT). In this off
-					policy setup, formalized in works such as Snell et al.<sup>[1]</sup>, trajectories are first sampled from a teacher model
-					conditioned on a long context, and the student is trained to imitate these fixed samples. Because the student never
-					generates its own trajectories during training, learning is restricted to the states visited by the teacher. While
-					effective, this off policy formulation can be brittle: small deviations by the student at inference time may lead it
-					into parts of the sequence space that were never observed during training, a phenomenon known as exposure bias<sup>[2]</sup>.
-					<br><br>
-					
-					In parallel, recent work in post training has explored on policy distillation as a more robust alternative to both SFT
-					and reinforcement learning. Investigations such as Lu and Thinking Machines Lab<sup>[3]</sup> highlight the benefits of
-					allowing the student to sample trajectories from its own policy, demonstrating improved robustness and stability over
-					off policy formulations. More recent methods such as Generalized Knowledge Distillation<sup>[4]</sup> have
-					shown that dense, per token supervision from a stronger teacher during on policy rollouts can significantly improve
-					performance. This approach combines the relevance of on policy learning, which ensures the model is trained on the
-					distribution of states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable
-					rewards characteristic of reinforcement learning frameworks such as Proximal Policy Optimization (PPO)<sup>[5]</sup>.
-					<br><br>
-					
-					Despite these advances, on policy distillation has so far been studied primarily in standard post training settings,
-					such as instruction following or reasoning, where the teacher and student receive identical inputs. To our knowledge, it
-					has not been applied to context distillation, where the central challenge is to transfer behaviors that only emerge when
-					a long context is present for the teacher but absent for the student.
-					<br><br>
-					
-					In this work, we investigate on policy distillation as a training paradigm for context distillation. We ask whether
-					sampling trajectories from the student, while using a teacher equipped with a long context to provide supervision, can
-					more faithfully and efficiently transfer context dependent behaviors than traditional off policy approaches. We also
-					explore how to isolate and distill the incremental effect of the long context, rather than the teacher’s entire policy,
-					and show that on policy methods provide a natural and effective framework for doing so.
-					</div>
-		    <div class="margin-right-block">
-						<!-- Margin note that clarifies some detail #main-content-block for intro section. -->
-		    </div>
+		<div class="margin-left-block">
 		</div>
-		<div class="content-margin-container" id="experiments_and_methodology">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-					<h1>Experiments and Methodology</h1>
-					<h3>On-Policy Context Distillation</h3>
-					We adopt an on-policy context distillation training scheme in which the student model generates trajectories from its own policy, while a teacher model conditioned on a long context provides supervision on those trajectories. Figure 2 illustrates the overall training loop. <br><br>
-					For each input prompt, the student samples a response conditioned only on the base prompt, without access to the long contextual scaffold. The resulting trajectory defines the sequence of states on which training occurs. At each token position, a teacher model, given the same prompt augmented with a long context—evaluates the student’s sampled tokens and provides per-token supervision. The student is then updated using losses computed on these on-policy rollouts. <br><br>
-					Crucially, while supervision is provided by a teacher with access to additional contextual information, optimization is performed over the student’s own trajectory distribution. This allows the student to internalize behaviors induced by the long context while avoiding the distributional mismatch inherent to off-policy context distillation. <br><br>
-			</div>
-		    <div class="margin-right-block">
-		    </div>
-		</div>
-
-		<div class="content-margin-container">
-			<div class="margin-left-block">
-			</div>
 		<div class="main-content-block">
-			<img src="./images/on_policy_context_distillation.svg" width=512px/>
+			<h1>Prior work</h1>
+			Most existing work on context distillation relies on supervised fine tuning (SFT). In this off
+			policy setup, formalized in works such as Snell et al.<sup>[1]</sup>, trajectories are first sampled from a
+			teacher model
+			conditioned on a long context, and the student is trained to imitate these fixed samples as shown in
+			<strong>Figure 1</strong>.
+			Because the student never generates its own trajectories during training, learning is restricted to the
+			states visited by the teacher.
+			This off policy formulation can lead small deviations by the student at inference time may lead it
+			into parts of the sequence space that were never observed during training, a phenomenon known as exposure
+			bias<sup>[2]</sup>.
+			<br><br>
+
+			In parallel, recent work in post training has explored on policy distillation as a more robust alternative
+			to both SFT
+			and reinforcement learning. Investigations such as Lu and Thinking Machines Lab<sup>[3]</sup> highlight the
+			benefits of
+			allowing the student to sample trajectories from its own policy, demonstrating improved robustness and
+			stability over
+			off policy formulations. More recent methods such as Generalized Knowledge Distillation<sup>[4]</sup> have
+			shown that dense, per token supervision from a stronger teacher during on policy rollouts can significantly
+			improve
+			performance. This approach combines the relevance of on policy learning, which ensures the model is trained
+			on the
+			distribution of states it actually visits, with the sample efficiency of distillation, avoiding the sparse
+			and unstable
+			rewards characteristic of reinforcement learning frameworks such as Proximal Policy Optimization
+			(PPO)<sup>[5]</sup>.
+			<br><br>
+
+			Despite these advances, on policy distillation has so far been studied primarily in standard post training
+			settings,
+			such as instruction following or reasoning, where the teacher and student receive identical inputs. To our
+			knowledge, it
+			has not been applied to context distillation, where the central challenge is to transfer behaviors that only
+			emerge when
+			a long context is present for the teacher but absent for the student.
+			<br><br>
+
+			In this work, we investigate on policy distillation as a training paradigm for context distillation. We ask
+			whether
+			sampling trajectories from the student, while using a teacher equipped with a long context to provide
+			supervision, can
+			more faithfully and efficiently transfer context dependent behaviors than traditional off policy approaches.
+			We also
+			explore how to isolate and distill the incremental effect of the long context, rather than the teacher’s
+			entire policy,
+			and show that on policy methods provide a natural and effective framework for doing so.
 		</div>
 		<div class="margin-right-block">
-			<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for questions with detailed context, the student model samples its own trajectories, a reward function compares the two, and importance sampling updates the student's weights based on on-policy supervision.
+			<!-- Margin note that clarifies some detail #main-content-block for intro section. -->
+		</div>
+	</div>
+	<div class="content-margin-container" id="experiments_and_methodology">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Experiments and Methodology</h1>
+			<h3>On-Policy Context Distillation</h3>
+			<img src="./images/on_policy_context_distillation.svg" width=512px />
+			We adopt an on-policy context distillation training scheme in which the student model generates trajectories
+			from its own policy, while a teacher model conditioned on a long context provides supervision on those
+			trajectories. Figure 2 illustrates the overall training loop. <br><br>
+			For each input prompt, the student samples a response conditioned only on the base prompt, without access to
+			the long contextual scaffold. The resulting trajectory defines the sequence of states on which training
+			occurs. At each token position, a teacher model, given the same prompt augmented with a long
+			context—evaluates the student’s sampled tokens and provides per-token supervision. The student is then
+			updated using losses computed on these on-policy rollouts. <br><br>
+			Crucially, while supervision is provided by a teacher with access to additional contextual information,
+			optimization is performed over the student’s own trajectory distribution. This allows the student to
+			internalize behaviors induced by the long context while avoiding the distributional mismatch inherent to
+			off-policy context distillation. <br><br>
+
+			Following the approach described in <em>On-Policy Distillation</em><sup>[3]</sup>, we define the per-token
+			reward as the negative difference between the student’s log-probability and the
+			long-context teacher’s log-probability on the student’s own sampled token. In expectation over student
+			rollouts, this objective corresponds exactly to minimizing the forward KL divergence from the student policy
+			to the teacher policy conditioned on the long context. The reward function takes the following form:
+			<br>
+			<br>
+			<div style="text-align: center;">
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mrow>
+						<mi>R</mi>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<msub>
+							<mi></mi>
+							<mi>t</mi>
+						</msub>
+						<mo stretchy="false">)</mo>
+						<mo>=</mo>
+						<mo>-</mo>
+						<mrow>
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<msub>
+								<mi>&#x03C0;</mi>
+								<mrow>
+									<mi>&#x03B8;</mi>
+								</mrow>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<msub>
+								<mi></mi>
+								<mi>t</mi>
+							</msub>
+							<mo stretchy="false">)</mo>
+							<mo>-</mo>
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<msub>
+								<mi>&#x03C0;</mi>
+								<mrow>
+									<mi>teacher</mi>
+									<mo>,</mo>
+									<mi>long</mi>
+								</mrow>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<msub>
+								<mi></mi>
+								<mi>t</mi>
+							</msub>
+							<mo stretchy="false">)</mo>
+						</mrow>
+					</mrow>
+				</math>
+			</div>
+		</div>
+		<div class="margin-right-block" style="transform: translateY(-65%)">
+			<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for
+			questions with detailed context, the student model samples its own trajectories, a reward function compares
+			the two, and importance sampling updates the student's weights based on on-policy supervision.
 		</div>
 	</div>
 
-		<div class="content-margin-container" id="experiments_and_methodology">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-					<h3>Context-Gain Reward Function</h3>
-					We propose a context-gain-based reward function that is more sensitive to the incremental effect of the long context. Specifically, we define the per-token reward as:
-					<br><br>
-					<div style="text-align: center;">
-						<math xmlns="http://www.w3.org/1998/Math/MathML">
-						  <mrow>
-							<mi>R</mi>
-							<mo stretchy="false">(</mo>
-							<mi>x</mi>
-							<mo stretchy="false">)</mo>
-							<mo>=</mo>
-					  
-							<mo>-</mo>
-							<mo stretchy="false">[</mo>
-					  
-							<mi>log</mi>
-							<mo>&#x2061;</mo>
-							<mi>&#x3C0;</mi>
-							<msub>
-							  <mi></mi>
-							  <mi>&#x03B8;</mi>
-							</msub>
-							<mo stretchy="false">(</mo>
-							<mi>x</mi>
-							<mo stretchy="false">)</mo>
-					  
-							<mo>-</mo>
-					  
-							<mo stretchy="false">(</mo>
-					  
-							<mi>log</mi>
-							<mo>&#x2061;</mo>
-							<mi>&#x3C0;</mi>
-							<msub>
-							  <mi></mi>
-							  <mrow>
+	<div class="content-margin-container" id="experiments_and_methodology">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h3>Context-Gain Reward Function</h3>
+			While this KL-divergence–based reward provides a simple on-policy objective, it treats the
+			long-context teacher as a monolithic target and does not distinguish between behavior that would already
+			arise without access to the long context and behavior that genuinely depends on it. To better isolate the
+			incremental contribution of the long context, we introduce a <em>context-gain</em> reward that explicitly
+			contrasts the long-context teacher with a short-context (or no-context) baseline. Specifically, we define
+			the per-token reward as:
+			<br><br>
+			<div style="text-align: center;">
+				<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<mrow>
+						<mi>R</mi>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<mo stretchy="false">)</mo>
+						<mo>=</mo>
+
+						<mo>-</mo>
+						<mo stretchy="false">[</mo>
+
+						<mi>log</mi>
+						<mo>&#x2061;</mo>
+						<mi>&#x3C0;</mi>
+						<msub>
+							<mi></mi>
+							<mi>&#x03B8;</mi>
+						</msub>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<mo stretchy="false">)</mo>
+
+						<mo>-</mo>
+
+						<mo stretchy="false">(</mo>
+
+						<mi>log</mi>
+						<mo>&#x2061;</mo>
+						<mi>&#x3C0;</mi>
+						<msub>
+							<mi></mi>
+							<mrow>
 								<mi>student</mi>
 								<mo>,</mo>
 								<mi>base</mi>
-							  </mrow>
-							</msub>
-							<mo stretchy="false">(</mo>
-							<mi>x</mi>
-							<mo stretchy="false">)</mo>
-					  
-							<mo>+</mo>
-					  
-							<mi>log</mi>
-							<mo>&#x2061;</mo>
-							<mi>&#x3C0;</mi>
-							<msub>
-							  <mi></mi>
-							  <mrow>
+							</mrow>
+						</msub>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<mo stretchy="false">)</mo>
+
+						<mo>+</mo>
+
+						<mi>log</mi>
+						<mo>&#x2061;</mo>
+						<mi>&#x3C0;</mi>
+						<msub>
+							<mi></mi>
+							<mrow>
 								<mi>teacher</mi>
 								<mo>,</mo>
 								<mi>long</mi>
-							  </mrow>
-							</msub>
-							<mo stretchy="false">(</mo>
-							<mi>x</mi>
-							<mo stretchy="false">)</mo>
-					  
-							<mo>-</mo>
-					  
-							<mi>log</mi>
-							<mo>&#x2061;</mo>
-							<mi>&#x3C0;</mi>
-							<msub>
-							  <mi></mi>
-							  <mrow>
+							</mrow>
+						</msub>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<mo stretchy="false">)</mo>
+
+						<mo>-</mo>
+
+						<mi>log</mi>
+						<mo>&#x2061;</mo>
+						<mi>&#x3C0;</mi>
+						<msub>
+							<mi></mi>
+							<mrow>
 								<mi>teacher</mi>
 								<mo>,</mo>
 								<mi>short</mi>
-							  </mrow>
-							</msub>
-							<mo stretchy="false">(</mo>
-							<mi>x</mi>
-							<mo stretchy="false">)</mo>
-					  
-							<mo stretchy="false">)</mo>
-					  
-							<mo stretchy="false">]</mo>
-						  </mrow>
-						</math>
-					  </div>
-					  <br>
-					  This reward encourages the student to preserve its base behavior while incorporating only the incremental effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the teacher and student are different models, this formulation helps isolate the contribution of the context itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that are unrelated to the contextual information.
-					  <br><br>
-					  We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and student differ in architecture or scale, and where the student's learning capacity is constrained, such as when using low-rank LoRA adapters.
+							</mrow>
+						</msub>
+						<mo stretchy="false">(</mo>
+						<mi>x</mi>
+						<mo stretchy="false">)</mo>
+
+						<mo stretchy="false">)</mo>
+
+						<mo stretchy="false">]</mo>
+					</mrow>
+				</math>
 			</div>
-		    <div class="margin-right-block">
-		    </div>
+			<br>
+			This reward encourages the student to preserve its base behavior while incorporating only the incremental
+			effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the
+			teacher and student are different models, this formulation helps isolate the contribution of the context
+			itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that
+			are unrelated to the contextual information.
+			<br><br>
+			We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and
+			student differ in architecture or scale, and where the student's learning capacity is constrained, such as
+			when using low-rank LoRA adapters.
 		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+	<div class="content-margin-container" id="experiments_and_methodology">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h3>Experimental Setup</h3>
+
+			<h4>Scaling Context Distillation with Teacher Demonstrations</h4>
+			In our first experiment, we compare off-policy
+			context distillation with on-policy context distillation under the two reward functions introduced above. We
+			use a fixed Qwen/Qwen3-8B model as both the student and the teacher, fine-tuning the student with LoRA rank
+			32 and a 4e-4 learning rate with a linear decay schedule. Across runs, we vary only the number of in-context
+			examples provided to the teacher, while the student always receives no demonstrations. The goal of this
+			experiment is to measure how effectively each reward formulation enables the student to absorb the
+			additional information supplied to the teacher as the number of examples increases. We use the Hendrycks
+			MATH dataset,
+			information about the dataset is provided <a href="#dataset">below</a>.
+
+			<h4>Scaling Context Distillation with Model Capacity</h4>
+			In our second experiment, we focus exclusively on on-policy distillation, comparing the standard KL-based
+			reward with the proposed context-gain reward. We fix the teacher as a Qwen/Qwen3-32B model provided with 20
+			in-context examples, while the student is a smaller Qwen/Qwen3-8B model. To study the effect of student
+			capacity on distillation performance, we fine-tune the student using LoRA adapters at three different ranks,
+			running separate training runs for each rank under both reward formulations. This setup isolates the
+			interaction between reward design and model capacity, allowing us to evaluate how effectively each on-policy
+			method transfers long-context reasoning behaviors from a larger teacher to a smaller student.
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+	<div class="content-margin-container" id="experiments_and_methodology">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h3 id="dataset">Dataset</h3>
+			We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test
+			problems spanning a wide range of topics, including algebra, geometry, number theory, and calculus. Each
+			problem is paired with a detailed solution, making the dataset well suited for evaluating multi-step
+			mathematical reasoning. We choose this dataset because of its difficulty and because prior work has shown
+			that model performance on MATH improves substantially when in-context examples are provided, making it an
+			ideal testbed for studying context-dependent behavior.
+
+			In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to
+			ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving
+			the student model exposure to a diverse assortment of tasks throughout the learning process. This randomized
+			batching allows us to evaluate how effectively on-policy context distillation improves the student’s ability
+			to internalize and generalize complex mathematical reasoning patterns.
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
 
 
-		<div class="content-margin-container" id="experiments_and_methodology">
-			<div class="margin-left-block">
+	<div class="content-margin-container" id="results">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Results</h1>
+			<img src="./images/context_distillation_scaling_math.svg" width=768px />
+			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
+			We evaluate how different distillation methods scale on the Hendrycks MATH dataset as a function of both the
+			number of
+			training examples and the LoRA rank used during fine tuning. As shown in Figure 3 (top), off-policy
+			distillation
+			provides the strongest initial gains in the extremely low-data regime, reflecting the benefits of directly
+			imitating
+			high-quality teacher trajectories when only a handful of examples are available. However, its performance
+			plateaus
+			quickly and does not reach teacher-level accuracy. In contrast, on-policy distillation and context-gain
+			on-policy
+			distillation improve more rapidly as training data increases, ultimately matching or surpassing teacher
+			performance when
+			trained on 20–50 samples. The inclusion of two reference curves in this plot helps contextualize these
+			gains: the
+			Untrained Student baseline (dotted purple line) remains at approximately 25% accuracy, illustrating the
+			difficulty of
+			the task without fine-tuning, while the Teacher model (black line) provides a stable upper bound of 70–80%
+			accuracy
+			across all regimes. Together, these baselines highlight the substantial improvements achieved through
+			distillation and
+			underscore the importance of student-generated rollouts for effective context transfer.
+			<br><br>
+			We further examine how performance varies with LoRA rank, which controls the expressiveness of the student’s
+			learned
+			updates. As shown in Figure 3 (bottom), both on-policy approaches benefit consistently from increased rank,
+			with
+			context-gain on-policy distillation outperforming the student baseline across all ranks and approaching
+			teacher-level
+			performance at higher capacities. The Untrained Student baseline again anchors the plot at roughly 25%
+			accuracy,
+			confirming that observed improvements result from the distillation process rather than incidental model
+			behavior. The
+			Teacher model remains a high-performance reference point, indicating the ceiling for what a fully
+			context-equipped model
+			can achieve. Overall, these results demonstrate that on-policy methods not only scale more effectively with
+			data but
+			also with model capacity, making them particularly well suited for transferring long-context reasoning
+			behaviors to
+			smaller or context-limited student models.
+		</div>
+		<div class="margin-right-block" style="transform: translateY(-40%)">
+			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
+				dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
+			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
+			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
+			increases. Qwen3-8B is used for both the teacher and student models.
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="implications_and_limitations">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<h1>Implications and limitations</h1>
+			Let's end with some discussion of the implications and limitations.
+		</div>
+		<div class="margin-right-block">
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="citations">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<div class="citation" id="references" style="height:auto">
+				<span style="font-size:16px">References:</span><br><br>
+
+				<a id="ref_1"></a>[1]
+				<a href="https://arxiv.org/abs/2209.15189">Learning by Distilling Context</a>,
+				Snell, C., Klein, D., and Zhong, R, 2022<br><br>
+
+				<a id="ref_2"></a>[2]
+				<a href="https://arxiv.org/abs/1511.06732">Sequence Level Training with Recurrent Neural Networks</a>,
+				Ranzato, M., Chopra, S., Auli, M., and Zaremba, W., 2015<br><br>
+
+				<a id="ref_3"></a>[3]
+				<a href="https://thinkingmachines.ai/blog/on-policy-distillation/">On-Policy Distillation</a>,
+				Lu, K., and Thinking Machines Lab, 2025<br><br>
+
+				<a id="ref_4"></a>[4]
+				<a href="https://arxiv.org/abs/2306.13649">On-Policy Distillation of Language Models: Learning from
+					Self-Generated Mistakes</a>,
+				Agarwal, S., et al., 2024<br><br>
+
+				<a id="ref_5"></a>[5]
+				<a href="https://arxiv.org/abs/2203.02155">Training Language Models to Follow Instructions with Human
+					Feedback</a>,
+				Ouyang, L., et al., OpenAI, 2022<br><br>
 			</div>
-			<div class="main-content-block">
-				<h3>Dataset</h3>
-				We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test problems that span a wide range of topics including algebra, geometry, number theory, and calculus. Each problem is paired with a detailed step-by-step solution, making the dataset well suited for evaluating multi-step mathematical reasoning. In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving the student model exposure to a diverse assortment of tasks throughout the learning process. This randomized batching allows us to evaluate how effectively on-policy context distillation improves the student's ability to reason through complex mathematical problems.			</div>
-			<div class="margin-right-block">
-			</div>
 		</div>
-
-		<div class="content-margin-container" id="experiments_and_methodology">
-			<div class="margin-left-block">
-			</div>
-			<div class="main-content-block">
-				<h3>Implementation Details</h3>
-				All experiments share a common set of hyperparameters and training configurations. We train for approximately 468 steps
-				using a batch size of 16, corresponding to a single pass over the 7,500 training examples. The student model is
-				fine-tuned using LoRA (Low-Rank Adaptation) with a rank of 32, which provides a balance between parameter efficiency and
-				adaptation capacity. Optimization is performed using Adam, with the learning rate determined by the model architecture
-				through get_lr("Qwen/Qwen3-8B"). A linear learning rate schedule decays this value to zero over the course of training.
-				<br><br>
-				For generation, we use greedy decoding with temperature 0.0 and a maximum output length of 2,000 tokens. During
-				training, the teacher model receives k = 20 in-context examples alongside each problem, while the student receives only
-				the problem statement with no demonstrations. In the off-policy setting, teacher responses are precomputed for all 7,500
-				training problems, forming a fixed dataset for supervised fine-tuning. In contrast, all on-policy variants (on-policy,
-				delta-on-policy, and context-aware-on-policy) compute teacher log-probabilities dynamically at each training step,
-				requiring a fresh teacher query for every student-generated trajectory.
-				<br><br>
-				The loss functions differ across methods. Off-policy distillation uses standard cross-entropy loss, while all on-policy
-				methods optimize an importance-sampling objective using per-token advantages derived from teacher log-probabilities.
-				Delta-on-policy further incorporates log-probabilities from both a base student model and a short-context teacher (k =
-				0) to isolate the incremental effect of long-context information. Context-aware-on-policy introduces adaptive weighting
-				based on context relevance, using a sensitivity parameter of 2.0 and clipping relevance scores to the range [0, 2.0]. .
-				Across all experiments, both teacher and student are instantiated as Qwen/Qwen3-8B models, and we fix the training seed
-				to 42 to ensure reproducibility. Checkpoints are saved every 10 training steps, and test accuracy is evaluated at each
-				checkpoint for all on-policy methods. </div>
-			<div class="margin-right-block">
-			</div>
+		<div class="margin-right-block">
+			<!-- margin notes for reference block here -->
 		</div>
+	</div>
 
-		<div class="content-margin-container" id="results">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-            <h1>Results</h1>
-				<img src="./images/context_distillation_scaling_math.svg" width=768px />
-				<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
-				We evaluate how different distillation methods scale on the Hendrycks MATH dataset as a function of both the number of
-				training examples and the LoRA rank used during fine tuning. As shown in Figure 3 (top), off-policy distillation
-				provides the strongest initial gains in the extremely low-data regime, reflecting the benefits of directly imitating
-				high-quality teacher trajectories when only a handful of examples are available. However, its performance plateaus
-				quickly and does not reach teacher-level accuracy. In contrast, on-policy distillation and context-gain on-policy
-				distillation improve more rapidly as training data increases, ultimately matching or surpassing teacher performance when
-				trained on 20–50 samples. The inclusion of two reference curves in this plot helps contextualize these gains: the
-				Untrained Student baseline (dotted purple line) remains at approximately 25% accuracy, illustrating the difficulty of
-				the task without fine-tuning, while the Teacher model (black line) provides a stable upper bound of 70–80% accuracy
-				across all regimes. Together, these baselines highlight the substantial improvements achieved through distillation and
-				underscore the importance of student-generated rollouts for effective context transfer.
-				<br><br>
-				We further examine how performance varies with LoRA rank, which controls the expressiveness of the student’s learned
-				updates. As shown in Figure 3 (bottom), both on-policy approaches benefit consistently from increased rank, with
-				context-gain on-policy distillation outperforming the student baseline across all ranks and approaching teacher-level
-				performance at higher capacities. The Untrained Student baseline again anchors the plot at roughly 25% accuracy,
-				confirming that observed improvements result from the distillation process rather than incidental model behavior. The
-				Teacher model remains a high-performance reference point, indicating the ceiling for what a fully context-equipped model
-				can achieve. Overall, these results demonstrate that on-policy methods not only scale more effectively with data but
-				also with model capacity, making them particularly well suited for transferring long-context reasoning behaviors to
-				smaller or context-limited student models. </div>
-		    <div class="margin-right-block" style="transform: translateY(-40%)">
-				<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples increases. Qwen3-8B is used for both the teacher and student models.
-		    </div>
-		</div>
-
-		<div class="content-margin-container" id="implications_and_limitations">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-						<h1>Implications and limitations</h1>
-						Let's end with some discussion of the implications and limitations.
-		    </div>
-		    <div class="margin-right-block">
-		    </div>
-		</div>
-
-		<div class="content-margin-container" id="citations">
-				<div class="margin-left-block">
-				</div>
-		    <div class="main-content-block">
-				<div class="citation" id="references" style="height:auto">
-					<span style="font-size:16px">References:</span><br><br>
-				
-					<a id="ref_1"></a>[1] 
-					<a href="https://arxiv.org/abs/2209.15189">Learning by Distilling Context</a>, 
-					Snell, C., Klein, D., and Zhong, R, 2022<br><br>
-				
-					<a id="ref_2"></a>[2] 
-					<a href="https://arxiv.org/abs/1511.06732">Sequence Level Training with Recurrent Neural Networks</a>, 
-					Ranzato, M., Chopra, S., Auli, M., and Zaremba, W., 2015<br><br>
-								
-					<a id="ref_3"></a>[3] 
-					<a href="https://thinkingmachines.ai/blog/on-policy-distillation/">On-Policy Distillation</a>, 
-					Lu, K., and Thinking Machines Lab, 2025<br><br>
-				
-					<a id="ref_4"></a>[4] 
-					<a href="https://arxiv.org/abs/2306.13649">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes</a>, 
-					Agarwal, S., et al., 2024<br><br>
-				
-					<a id="ref_5"></a>[5] 
-					<a href="https://arxiv.org/abs/2203.02155">Training Language Models to Follow Instructions with Human Feedback</a>, 
-					Ouyang, L., et al., OpenAI, 2022<br><br>
-				</div>
-		    </div>
-		    <div class="margin-right-block">
-            <!-- margin notes for reference block here -->
-		    </div>
-		</div>
-
-	</body>
+</body>
 
 </html>
