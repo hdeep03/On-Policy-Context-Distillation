@@ -179,7 +179,7 @@ def evaluate_sampler(sampling_client: tinker.SamplingClient, config: OffPolicyCo
             correct_count += 1
 
     logger.info(f"Accuracy: {correct_count / len(samples)}; {correct_count} / {len(samples)}")
-    return correct_count / len(samples)    
+    return correct_count / len(samples)   
     
 
 def evaluate(sampler_path: str, config: OffPolicyConfig):
@@ -188,3 +188,30 @@ def evaluate(sampler_path: str, config: OffPolicyConfig):
     sampling_client = service_client.create_sampling_client(model_path=sampler_path)
     return evaluate_sampler(sampling_client, config)
 
+
+def evaluate_teacher(config: OffPolicyConfig):
+    service_client = tinker.ServiceClient()
+    teacher_sampler = service_client.create_sampling_client(base_model=config.teacher_model)
+    teacher_tokenizer = get_tokenizer(config.teacher_model)
+    teacher_renderer = get_renderer(get_renderer_name(config.teacher_model), teacher_tokenizer)
+    futures = []
+    samples = []
+    correct_count = 0
+    for sample in test_dataset:
+        prompt = create_teacher_prompt(teacher_renderer, sample, config.seed, config.k)
+        sampling_params = types.SamplingParams(max_tokens=config.max_gen_tokens, temperature=config.temperature, stop=teacher_renderer.get_stop_sequences())
+        future = teacher_sampler.sample(prompt=prompt, sampling_params=sampling_params, num_samples=1)
+        futures.append(future)
+        samples.append(sample)
+
+    results = []
+    for future in track(futures, description="Evaluating..."):
+        results.append(future.result())
+
+    for result, sample in zip(results, samples):
+        teacher_response = teacher_tokenizer.decode(result.sequences[0].tokens, skip_special_tokens=False)
+        if is_correct(sample, teacher_response):
+            correct_count += 1
+
+    print(f"Accuracy: {correct_count / len(samples)}; {correct_count} / {len(samples)}")
+    return correct_count / len(samples)
