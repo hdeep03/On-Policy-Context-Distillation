@@ -329,7 +329,7 @@
 		<div class="margin-right-block">
 			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that
 			the student receives the teacher's output sequence as input at each step rather than using the student's own
-			generated sequence.
+			generated sequence. Cross-entropy loss is used to train the student to match the teacher's output sequence.
 		</div>
 	</div>
 
@@ -648,8 +648,8 @@
 		</div>
 		<div class="margin-right-block">
 			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
-			dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
-			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
+			dataset.</strong> Test set accuracy is shown as a function of the number of in-context examples provided to the teacher (log
+			scale). Off-policy distillation performs best when distilling from a low-context teacher while on-policy and context-gain
 			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
 			increases. Qwen3-8B is used for both the teacher and student models.
 		</div>
@@ -693,7 +693,10 @@
 			<img id = "figure4" src="./images/lora_rank_context_distillation_math.svg" width=768px />
 		</div>
 		<div class="margin-right-block">
-			<strong>Figure 4:. </strong>
+			<strong>Figure 4: Context distillation scaling with different LoRA ranks.</strong>
+			Test set accuracy is shown as a function of the LoRA rank. The teacher is a frozen Qwen/Qwen3-32B model provided with
+			a long context(20 in-context examples), and the student is Qwen/Qwen3-8B trained with empty context. We compare standard on-policy distillation against our
+			context-gain reward, which isolates the contribution of teacher context by subtracting a no-context baseline.
 		</div>
 	</div>
 
