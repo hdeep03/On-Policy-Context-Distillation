@@ -403,7 +403,7 @@
 			For each input prompt, the student samples a response conditioned only on the base prompt, without access to the long
 			contextual scaffold. The resulting trajectory defines the sequence of states on which training occurs. At each token
 			position, a teacher model, given the same prompt augmented with a long context, evaluates the student’s sampled tokens
-			and provides per token supervision. The student is then updated using losses computed on these on policy rollouts.
+			and provides per-token supervision. The student is then updated using losses computed on these on-policy rollouts.
 			<br><br>
 			Crucially, while supervision is provided by a teacher with access to additional contextual information,
 			optimization is performed over the student’s own trajectory distribution. This allows the student to
