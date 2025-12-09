@@ -707,80 +707,22 @@
 			increases. Qwen3-8B is used for both the teacher and student models.
 		</div>
 	</div>
-
-	<div class="content-margin-container" id="results_discussion">
+	
+	<div class="content-margin-container" id="conclusion">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			We evaluate the scaling behavior of different context distillation strategies on the Hendrycks MATH dataset
-			as a function of the number of in-context examples provided to the teacher, as shown in <a
-				href="#figure3">Figure 3</a>. Off-policy distillation achieves the strongest performance when the
-			teacher is given only a
-			small number of in-context examples, reflecting the effectiveness of directly imitating teacher-generated
-			trajectories in the low-context regime. However, its gains saturate quickly as additional examples are
-			supplied to the teacher, indicating diminishing returns as the teacher’s responses become more
-			context-dependent.
-			<br><br>
-			In contrast, both on-policy and context-gain on-policy distillation exhibit slower initial improvements when
-			the teacher has limited contextual information, but scale more favorably as the number of in-context
-			examples increases. With 20–50 in-context examples, these methods approach and in some cases slightly
-			exceed the teacher’s test-set accuracy. This suggests that allowing the student to generate its own
-			trajectories while receiving supervision from a context-augmented teacher becomes increasingly important as
-			the amount of available contextual information grows.
-			<br><br>
-			A likely explanation for this behavior lies in differences in distributional coverage across training
-			strategies. Off-policy distillation relies on a fixed set of teacher-generated trajectories collected under
-			a particular context setting, which provides strong early supervision but may inadequately cover the states
-			encountered by the student as its policy evolves. In contrast, on-policy and context-gain on-policy
-			distillation train directly on student-generated rollouts, ensuring that supervision is applied on the
-			distribution of states actually visited by the student. This alignment between training and inference
-			distributions leads to improved scalability as the teacher’s context becomes richer.
-			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
+			<h1>Conclusion</h1>
 
-			We evaluate the effect of reward design under on-policy context distillation while varying the student’s
-			LoRA rank as shown in <strong>Figure 4</strong>. The teacher is a frozen Qwen/Qwen3-32B model provided with
-			a long context, and the student is
-			Qwen/Qwen3-8B trained with empty context. We compare standard on-policy distillation against our
-			context-gain reward, which isolates the contribution of teacher context by subtracting a no-context
-			baseline.
-			<br><br>
-			At LoRA rank 8, context-gain on-policy achieves higher accuracy than standard on-policy (42.5% vs. 37.4%),
-			suggesting improved sample efficiency in the most capacity-constrained setting. However, as the LoRA rank
-			increases, standard on-policy distillation consistently outperforms the context-gain variant. At rank 16,
-			standard on-policy reaches 56.8% accuracy compared to 45.4% for context-gain on-policy, and this gap
-			persists at rank 32 (58.1% vs. 47.7%). Neither method approaches teacher performance (75.5%), though both
-			substantially outperform the untrained student baseline (22.7%).
-			<br><br>
-			We initially hypothesized that the context-gain reward would outperform standard on-policy distillation at
-			low LoRA ranks. Since this reward explicitly isolates the effect of the teacher’s context by suppressing
-			style and base-model behavior, it provides a more targeted learning signal that should be
-			well-suited to capacity-limited adaptation.
-			<br><br>
-			However, while context-gain on-policy does outperform standard on-policy at the smallest LoRA rank (8), this
-			advantage does not persist as capacity increases, and the gap quickly reverses.
-			<br><br>
-			We theorize that this occurs because the context-gain reward explicitly discourages the student from
-			absorbing any behavior not
-			attributable to the teacher’s context. While desirable for discarding style and base-model behavior, this
-			constraint may become
-			overly restrictive as LoRA rank increases. In contrast, standard on-policy distillation allows the student
-			to exploit additional capacity to pick up auxiliary reasoning heuristics or stylistic scaffolding that while
-			not strictly context-dependent, may still improve performance.
+			<h3>Limitations and Next Steps</h3>
+
+			<h3>Acknowledgments</h3>
+
 		</div>
 		<div class="margin-right-block">
 		</div>
 	</div>
 
-	<div class="content-margin-container" id="implications_and_limitations">
-		<div class="margin-left-block">
-		</div>
-		<div class="main-content-block">
-			<h1>Implications and limitations</h1>
-			Let's end with some discussion of the implications and limitations.
-		</div>
-		<div class="margin-right-block">
-		</div>
-	</div>
 
 	<div class="content-margin-container" id="citations">
 		<div class="margin-left-block">
