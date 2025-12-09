@@ -299,8 +299,8 @@
 		    <div class="main-content-block">
 					<h1>Experiments and Methodology</h1>
 					<h3>On-Policy Context Distillation</h3>
-					We propose on-policy context distillation as a more robust alternative to supervised fine-tuning context distillation. In on-policy context distillation, the student samples trajectories from its own policy and receives dense, per-token supervision from a stronger teacher. This approach combines the relevance of on-policy learning, which trains the model on the states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable rewards common in reinforcement learning.
-					<br><br>
+					We propose on-policy context distillation as a more stable and effective alternative to supervised fine tuning for context distillation. Rather than training the student exclusively on teacher generated data, the student actively samples trajectories from its own policy, ensuring that learning is grounded in the distribution of states the model will actually encounter during inference. For every trajectory the student produces, a stronger teacher model provides dense, per token supervision that guides the student toward higher quality reasoning and response generation.
+					This framework retains the relevance of on-policy learning, since the student directly improves on the behaviors it naturally exhibits, while also preserving the efficiency and stability of distillation. By relying on rich, token level feedback rather than the sparse and unstable rewards common in reinforcement learning, on-policy context distillation creates a more reliable and efficient training signal. The result is a training approach that brings together the strengths of on-policy learning and distillation to achieve more robust context dependent behavior without the instability often associated with reinforcement learning methods.					<br><br>
 					<img src="./images/on_policy_context_distillation.svg" width=512px/>
 					<h3>Context-Gain Reward Function</h3>
 					We propose a context-gain-based reward function that is more sensitive to the incremental effect of the long context. Specifically, we define the per-token reward as:
@@ -394,7 +394,7 @@
 					  <br><br>
 			</div>
 		    <div class="margin-right-block" style="transform: translate(0%, -100%);"> <!-- you can move the margin notes up and down with translate -->
-          Interestingly, Plato also asked if X does Y, in <a href="#ref_1">[1]</a>.
+				<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for questions with detailed context, the student model samples its own trajectories, a reward function compares the two, and importance sampling updates the student’s weights based on on-policy supervision</a>.
 		    </div>
 		</div>
 
