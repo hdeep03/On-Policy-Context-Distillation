@@ -284,7 +284,7 @@
 				<a href="#prior_work">Prior work</a><br><br>
 				<a href="#experiments_and_methodology">Experiments and Methodology</a><br><br>
 				<a href="#results_discussion">Results and Discussion</a><br><br>
-				<a href="#implications_and_limitations">Implications and limitations</a><br><br>
+				<a href="#conclusion">Conclusion</a><br><br>
 			</div>
 		</div>
 		<div class="main-content-block">
@@ -707,16 +707,50 @@
 			increases. Qwen3-8B is used for both the teacher and student models.
 		</div>
 	</div>
-	
+
 	<div class="content-margin-container" id="conclusion">
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
 			<h1>Conclusion</h1>
+			This work demonstrates that on-policy distillation is an effective and scalable framework for context
+			distillation. By training on student-generated trajectories while using a teacher with access to long
+			context for supervision, on-policy methods reduce distributional mismatch and more faithfully transfer
+			behaviors that emerge only under rich contextual scaffolds. As teacher context increases, on-policy
+			distillation continues to yield performance gains, whereas off-policy approaches saturate, indicating a
+			fundamental advantage in settings where context plays a dominant role.
+			<br><br>
+			We also show that isolating the incremental contribution of context through a context-gain reward can
+			improve learning when student capacity is severely constrained, but becomes limiting as capacity grows.
+			Standard on-policy distillation more effectively exploits additional model capacity, even when some
+			transferred behaviors are not strictly context dependent.
+			<br><br>
+			Overall, these findings suggest that successful context distillation requires both on-policy training and
+			carefully chosen supervision objectives, with the optimal reward depending on the capacity of the student
+			model.
 
 			<h3>Limitations and Next Steps</h3>
-
+			Our study explores only two reward formulations for on-policy context distillation. While these capture
+			important extremes, i.e. full teacher imitation and isolated context transfer, intermediate objectives
+			may better balance targeted learning and capacity utilization, especially across different student sizes.
+			<br><br>
+			We use a fixed number of in-context examples per run and do not explore curriculum or adaptive context
+			schedules. Varying the amount or composition of teacher context over training could further improve
+			efficiency and stability.
+			<br><br>
+			Evaluation is limited to the Hendrycks MATH dataset, which emphasizes symbolic reasoning. It remains an open
+			question whether the observed scaling behavior generalizes to other domains such as code generation, tool
+			use, or long-form instruction following.
+			<br><br>
+			Finally, student adaptation is restricted to LoRA fine-tuning at a small set of ranks. Extending these
+			experiments to other parameter-efficient methods or full-model fine-tuning is a potential direction for future work.
 			<h3>Acknowledgments</h3>
+			We would like to thank the course instructors and staff for their help and support as well as for providing
+			the Tinker API keys which were
+			used for all experiments.
+			<h3>Code and Data</h3>
+			The code and model checkpoints for this project are available <a
+				href="https://github.com/hdeep03/On-Policy-Context-Distillation">here</a>.
 
 		</div>
 		<div class="margin-right-block">
@@ -728,8 +762,8 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
+			<h1>References</h1>
 			<div class="citation" id="references" style="height:auto">
-				<span style="font-size:16px">References:</span><br><br>
 
 				<a id="ref_1"></a>[1]
 				<a href="https://arxiv.org/abs/2209.15189">Learning by Distilling Context</a>,
