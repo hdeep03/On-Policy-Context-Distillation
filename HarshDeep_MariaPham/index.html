@@ -644,10 +644,24 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Results and Discussion</h1>
-			<img src="./images/context_distillation_scaling_math.svg" width=768px />
+			<img id = "figure3" src="./images/context_distillation_scaling_math.svg" width=768px />
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
+			dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
+			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
+			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
+			increases. Qwen3-8B is used for both the teacher and student models.
+		</div>
+	</div>
+
+
+	<div class="content-margin-container" id="results_discussion">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
 			We evaluate the scaling behavior of different context distillation strategies on the Hendrycks MATH dataset
-			as a function of the number of in-context examples provided to the teacher, as shown in <strong>Figure
-				3</strong>. Off-policy distillation achieves the strongest performance when the teacher is given only a
+			as a function of the number of in-context examples provided to the teacher, as shown in <a href="#figure3">Figure 3</a>. Off-policy distillation achieves the strongest performance when the teacher is given only a
 			small number of in-context examples, reflecting the effectiveness of directly imitating teacher-generated
 			trajectories in the low-context regime. However, its gains saturate quickly as additional examples are
 			supplied to the teacher, indicating diminishing returns as the teacher’s responses become more
@@ -667,10 +681,28 @@
 			distillation train directly on student-generated rollouts, ensuring that supervision is applied on the
 			distribution of states actually visited by the student. This alignment between training and inference
 			distributions leads to improved scalability as the teacher’s context becomes richer.
-			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
+		</div>
+		<div class="margin-right-block" style="transform: translateY(-40%)">
+		</div>
+	</div>
 
+	<div class="content-margin-container" id="results_discussion">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
+			<img id = "figure4" src="./images/lora_rank_context_distillation_math.svg" width=768px />
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 4:. </strong>
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="results_discussion">
+		<div class="margin-left-block">
+		</div>
+		<div class="main-content-block">
 			We evaluate the effect of reward design under on-policy context distillation while varying the student’s
-			LoRA rank as shown in <strong>Figure 4</strong>. The teacher is a frozen Qwen/Qwen3-32B model provided with
+			LoRA rank as shown in <a href="#figure4">Figure 4</a>. The teacher is a frozen Qwen/Qwen3-32B model provided with
 			a long context, and the student is
 			Qwen/Qwen3-8B trained with empty context. We compare standard on-policy distillation against our
 			context-gain reward, which isolates the contribution of teacher context by subtracting a no-context
@@ -698,13 +730,9 @@
 			overly restrictive as LoRA rank increases. In contrast, standard on-policy distillation allows the student
 			to exploit additional capacity to pick up auxiliary reasoning heuristics or stylistic scaffolding that while
 			not strictly context-dependent, may still improve performance.
+
 		</div>
-		<div class="margin-right-block" style="transform: translateY(-40%)">
-			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
-				dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log
-			scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain
-			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
-			increases. Qwen3-8B is used for both the teacher and student models.
+		<div class="margin-right-block">
 		</div>
 	</div>
 
