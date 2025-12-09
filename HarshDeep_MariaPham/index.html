@@ -345,21 +345,21 @@
 			<a href="#figure1">Figure 1</a>.
 			Because the student never generates its own trajectories during training, learning is restricted to the
 			states visited by the teacher.
-			This off policy formulation can lead small deviations by the student at inference time may lead it
+			This off-policy formulation can lead small deviations by the student at inference time may lead it
 			into parts of the sequence space that were never observed during training, a phenomenon known as exposure
 			bias<sup>[2]</sup>.
 			<br><br>
 
-			In parallel, recent work in post training has explored on policy distillation as a more robust alternative
+			In parallel, recent work in post training has explored on-policy distillation as a more robust alternative
 			to both SFT
 			and reinforcement learning. Investigations such as Lu and Thinking Machines Lab<sup>[3]</sup> highlight the
 			benefits of
 			allowing the student to sample trajectories from its own policy, demonstrating improved robustness and
 			stability over
-			off policy formulations. More recent methods such as Generalized Knowledge Distillation<sup>[4]</sup> have
-			shown that dense, per token supervision from a stronger teacher during on policy rollouts can significantly
+			off-policy formulations. More recent methods such as Generalized Knowledge Distillation<sup>[4]</sup> have
+			shown that dense, per token supervision from a stronger teacher during on-policy rollouts can significantly
 			improve
-			performance. This approach combines the relevance of on policy learning, which ensures the model is trained
+			performance. This approach combines the relevance of on-policy learning, which ensures the model is trained
 			on the
 			distribution of states it actually visits, with the sample efficiency of distillation, avoiding the sparse
 			and unstable
@@ -367,7 +367,7 @@
 			(PPO)<sup>[5]</sup>.
 			<br><br>
 
-			Despite these advances, on policy distillation has so far been studied primarily in standard post training
+			Despite these advances, on-policy distillation has so far been studied primarily in standard post training
 			settings,
 			such as instruction following or reasoning, where the teacher and student receive identical inputs. To our
 			knowledge, it
@@ -376,15 +376,15 @@
 			a long context is present for the teacher but absent for the student.
 			<br><br>
 
-			In this work, we investigate on policy distillation as a training paradigm for context distillation. We ask
+			In this work, we investigate on-policy distillation as a training paradigm for context distillation. We ask
 			whether
 			sampling trajectories from the student, while using a teacher equipped with a long context to provide
 			supervision, can
-			more faithfully and efficiently transfer context dependent behaviors than traditional off policy approaches.
+			more faithfully and efficiently transfer context dependent behaviors than traditional off-policy approaches.
 			We also
 			explore how to isolate and distill the incremental effect of the long context, rather than the teacher’s
 			entire policy,
-			and show that on policy methods provide a natural and effective framework for doing so.
+			and show that on-policy methods provide a natural and effective framework for doing so.
 		</div>
 		<div class="margin-right-block">
 			<!-- Margin note that clarifies some detail #main-content-block for intro section. -->
