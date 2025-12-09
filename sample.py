@@ -1,5 +1,6 @@
 from opcd.experiments.off_policy import OffPolicyConfig, evaluate
 
-RUN_PATH = "tinker://a7b8dfec-8675-56ca-b86c-6a27f179709a:train:0/sampler_weights/context-aware-on-policy-k50-rank32-10"
+RUN_PATH = "tinker://5d49697d-4ebe-54ca-a5eb-6b3f8069fbe2:train:0/sampler_weights/delta-on-policy-k20-rank32-340"
 config = OffPolicyConfig()
+print(RUN_PATH)
 evaluate(RUN_PATH, config)

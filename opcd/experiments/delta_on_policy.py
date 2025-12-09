@@ -6,6 +6,7 @@ import chz
 from rich.progress import track
 import tinker
 from tinker import types
+import numpy as np
 from tinker_cookbook.renderers import Renderer, get_renderer, TrainOnWhat
 from tinker_cookbook.tokenizer_utils import get_tokenizer
 from tinker_cookbook.supervised.data import conversation_to_datum
@@ -16,20 +17,21 @@ from tinker_cookbook.hyperparam_utils import get_lr
 from tinker_cookbook.utils.ml_log import setup_logging
 
 from opcd.dataset.hendrycks_math import train_dataset, test_dataset, is_correct
-from opcd.experiments.off_policy import OffPolicyConfig, get_renderer_name, create_teacher_prompt, create_student_prompt, get_experiment_name, evaluate
+from opcd.experiments.off_policy import OffPolicyConfig, get_renderer_name, create_teacher_prompt, create_student_prompt, evaluate, get_experiment_name
 
 logger = logging.getLogger(__name__)
 
 def run(config: OffPolicyConfig):
     service_client = tinker.ServiceClient()
     teacher_sampler = service_client.create_sampling_client(base_model=config.teacher_model)
+    base_student_sampler = service_client.create_sampling_client(base_model=config.student_model)
     training_client = service_client.create_lora_training_client(
         base_model=config.student_model,
         rank=config.rank,
         seed=config.seed
     )
-    experiment_name = f"on-policy-{get_experiment_name(config)}"
-    log_dir = f"./logs/on-policy/{get_experiment_name(config)}"
+    experiment_name = f"delta-on-policy-{get_experiment_name(config)}"
+    log_dir = f"./logs/delta-on-policy/{get_experiment_name(config)}"
     os.makedirs(log_dir, exist_ok=True)
     checkpoints_path = os.path.join(log_dir, "checkpoints.jsonl")
     if not os.path.exists(checkpoints_path):
@@ -42,7 +44,7 @@ def run(config: OffPolicyConfig):
     teacher_renderer = get_renderer(get_renderer_name(config.teacher_model), teacher_tokenizer)
 
     train_dataset_shuffled = train_dataset.shuffle(config.seed)
-    n_batches = len(train_dataset) // config.batch_size
+    n_batches = len(train_dataset_shuffled) // config.batch_size
     total_steps = n_batches
 
     sampling_params = types.SamplingParams(max_tokens=config.max_gen_tokens, temperature=config.temperature, stop=student_renderer.get_stop_sequences())
@@ -53,6 +55,7 @@ def run(config: OffPolicyConfig):
         batch = train_dataset_shuffled.select(range(batch_idx * config.batch_size, (batch_idx + 1) * config.batch_size))
         student_prompts = [create_student_prompt(student_renderer, sample) for sample in batch]
         teacher_prompts = [create_teacher_prompt(teacher_renderer, sample, config.seed, config.k, prefill=None) for sample in batch]
+        short_teacher_prompts = [create_teacher_prompt(teacher_renderer, sample, config.seed, 0, prefill=None) for sample in batch]
 
         student_futures = []
         for student_prompt in student_prompts:
@@ -61,24 +64,40 @@ def run(config: OffPolicyConfig):
         student_responses: List[types.SampleResponse] = [student_future.result() for student_future in student_futures]
 
         teacher_futures = []
-        for teacher_prompt, student_response in zip(teacher_prompts, student_responses):
+        short_teacher_futures = []
+        base_student_futures = []
+        for teacher_prompt, short_teacher_prompt, student_response, base_student_prompt in zip(teacher_prompts, short_teacher_prompts, student_responses, student_prompts):
             teacher_prompt = types.ModelInput.from_ints(teacher_prompt.to_ints() + student_response.sequences[0].tokens)
+            short_teacher_prompt = types.ModelInput.from_ints(short_teacher_prompt.to_ints() + student_response.sequences[0].tokens)
+            base_student_prompt = types.ModelInput.from_ints(base_student_prompt.to_ints() + student_response.sequences[0].tokens)
             future = teacher_sampler.compute_logprobs(teacher_prompt)
             teacher_futures.append(future)
+            short_teacher_future = teacher_sampler.compute_logprobs(short_teacher_prompt)
+            short_teacher_futures.append(short_teacher_future)
+            base_student_future = base_student_sampler.compute_logprobs(base_student_prompt)
+            base_student_futures.append(base_student_future)
 
         teacher_logprobs: List[List[Optional[float]]] = [teacher_future.result() for teacher_future in teacher_futures]
-
+        short_teacher_logprobs: List[List[Optional[float]]] = [short_teacher_future.result() for short_teacher_future in short_teacher_futures]
+        base_student_logprobs: List[List[Optional[float]]] = [base_student_future.result() for base_student_future in base_student_futures]
         data = []
-        for teacher_logprob, student_response, student_prompt in zip(teacher_logprobs, student_responses, student_prompts):
+        mean_advantages = []
+        mean_deltas = []
+        for teacher_logprob, short_teacher_logprob, base_student_logprob, student_response, student_prompt in zip(teacher_logprobs, short_teacher_logprobs, base_student_logprobs, student_responses, student_prompts):
             student_logprobs = student_response.sequences[0].logprobs
             n = len(student_logprobs)
-            advantage = [teacher_logp - student_logp for teacher_logp, student_logp in zip(teacher_logprob[-n:], student_logprobs)]
+            base_student_logprobs = np.array(base_student_logprob[-n:])
+            delta = np.array([teacher_logp - short_teacher_logp for teacher_logp, short_teacher_logp in zip(teacher_logprob[-n:], short_teacher_logprob[-n:])])
+            target_logprobs = base_student_logprobs + delta
+            advantage = target_logprobs - student_logprobs
             prompt_tokens = student_prompt.to_ints()
             tokens = prompt_tokens + student_response.sequences[0].tokens
             input_tokens = tokens[:-1]
             target_tokens = tokens[1:]
+            mean_advantages.append(advantage.mean())
+            mean_deltas.append(delta.mean())
             all_logprobs = [0.0] * (len(prompt_tokens) - 1) + student_logprobs
-            all_advantages = [0.0] * (len(prompt_tokens) - 1) + advantage
+            all_advantages = [0.0] * (len(prompt_tokens) - 1) + advantage.tolist()
             datum = types.Datum(
                 model_input=types.ModelInput.from_ints(input_tokens),
                 loss_fn_inputs={
@@ -94,7 +113,12 @@ def run(config: OffPolicyConfig):
         optim_step_future = training_client.optim_step(optim_params)
         fwd_bwd_result = fwd_bwd_future.result()
         _ = optim_step_future.result()
-        ml_logger.log_metrics(fwd_bwd_result.metrics, step=batch_idx)
+        metrics = {
+            **fwd_bwd_result.metrics,
+            "mean_advantages": np.mean(mean_advantages),
+            "mean_deltas": np.mean(mean_deltas)
+        }
+        ml_logger.log_metrics(metrics, step=batch_idx)
         if batch_idx % 10 == 0:
             path_dict = checkpoint_utils.save_checkpoint(
                 training_client=training_client,

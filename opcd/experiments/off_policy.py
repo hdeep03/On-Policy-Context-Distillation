@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import Optional, Literal
 
 from opcd.dataset.hendrycks_math import train_dataset, test_dataset, is_correct
 
@@ -31,6 +31,10 @@ class OffPolicyConfig:
     temperature: float = 0.0
     batch_size: int = 16 
     learning_rate: float = get_lr("Qwen/Qwen3-8B")
+    experiment: Literal["delta-on-policy", "off-policy", "on-policy"]
+
+def get_experiment_name(config: OffPolicyConfig) -> str:
+    return f"k{config.k}-rank{config.rank}-student_{config.student_model.split('/')[-1]}-teacher_{config.teacher_model.split('/')[-1]}"
 
 def create_teacher_prompt(renderer: Renderer, sample: dict, seed: int, k: int, prefill: Optional[str] = "Solution: ") -> types.ModelInput:
     system_message = [
@@ -71,6 +75,8 @@ def get_renderer_name(model_name: str) -> str:
     match model_name:
         case "Qwen/Qwen3-8B":
             return "qwen3"
+        case "Qwen/Qwen3-32B":
+            return "qwen3"
         case _:
             raise ValueError(f"Unknown model: {model_name}")
 
@@ -82,8 +88,8 @@ def run(config: OffPolicyConfig):
         rank=config.rank,
         seed=config.seed
     )
-    experiment_name = f"off-policy-k{config.k}-rank{config.rank}"
-    log_dir = f"./logs/off-policy/{config.k}-{config.rank}"
+    experiment_name = f"off-policy-{get_experiment_name(config)}"
+    log_dir = f"./logs/off-policy/{get_experiment_name(config)}"
     os.makedirs(log_dir, exist_ok=True)
     checkpoints_path = os.path.join(log_dir, "checkpoints.jsonl")
     if not os.path.exists(checkpoints_path):
@@ -150,15 +156,9 @@ def run(config: OffPolicyConfig):
     )
 
 
-def evaluate(sampler_path: str, config: OffPolicyConfig):
-    service_client = tinker.ServiceClient()
-    logger.info(f"Evaluating with sampler path: {sampler_path}")
-    sampling_client = service_client.create_sampling_client(model_path=sampler_path)
-    logger.info(f"Created sampling client")
+def evaluate_sampler(sampling_client: tinker.SamplingClient, config: OffPolicyConfig):
     student_tokenizer = get_tokenizer(config.student_model)
     student_renderer = get_renderer(get_renderer_name(config.student_model), student_tokenizer)
-    logger.info(f"Created student renderer")
-
     futures = []
     samples = []
     correct_count = 0
@@ -178,5 +178,13 @@ def evaluate(sampler_path: str, config: OffPolicyConfig):
         if is_correct(sample, student_response):
             correct_count += 1
 
-    print(f"Accuracy: {correct_count / len(samples)}; {correct_count} / {len(samples)}")
+    logger.info(f"Accuracy: {correct_count / len(samples)}; {correct_count} / {len(samples)}")
+    return correct_count / len(samples)    
+    
+
+def evaluate(sampler_path: str, config: OffPolicyConfig):
+    service_client = tinker.ServiceClient()
+    logger.info(f"Evaluating with sampler path: {sampler_path}")
+    sampling_client = service_client.create_sampling_client(model_path=sampler_path)
+    return evaluate_sampler(sampling_client, config)
 
