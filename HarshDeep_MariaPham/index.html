@@ -273,20 +273,36 @@
 				</div>
 			<div class="main-content-block">
 					<h1>Prior work</h1>
-				Most existing work on context distillation relies on <em>supervised fine-tuning</em> (SFT). In this off-policy setup, trajectories are first sampled from a teacher model conditioned on a long context, and the student is then trained to imitate these fixed teacher-generated samples. Because the student never generates its own trajectories during training, learning is restricted to the states visited by the teacher. While effective, this off-policy formulation can be brittle: small deviations by the student at inference time may lead it into parts of the sequence space that were never observed during training, causing errors to compound over long generations.
-
-				<br><br>
-
-				In parallel, recent work in post-training has explored <em>on-policy distillation</em> as a more robust alternative to both supervised fine-tuning and reinforcement learning. In on-policy distillation, the student samples trajectories from its own policy and receives dense, per-token supervision from a stronger teacher. This approach combines the relevance of on-policy learning, which trains the model on the states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable rewards common in reinforcement learning.
-
-				<br><br>
-
-				Despite these advances, on-policy distillation has so far been studied primarily in standard post-training settings, such as instruction following or reasoning, where the teacher and student receive identical inputs. To our knowledge, it has not been applied to <em>context distillation</em>, where the core challenge is to transfer behaviors that only emerge when a long context is present.
-
-				<br><br>
-
-				In this work, we investigate on-policy distillation as a training paradigm for context distillation. We ask whether sampling trajectories from the student—while using a teacher equipped with a long context to provide supervision—can more faithfully and efficiently transfer context-dependent behaviors than traditional off-policy approaches. We also explore how to isolate and distill the <em>incremental effect</em> of the long context, rather than the teacher’s entire policy, and show that on-policy methods provide a natural and effective framework for doing so.
-				</div>
+					Most existing work on context distillation relies on supervised fine tuning (SFT). In this off
+					policy setup, formalized in works such as Snell et al.<sup>[1]</sup>, trajectories are first sampled from a teacher model
+					conditioned on a long context, and the student is trained to imitate these fixed samples. Because the student never
+					generates its own trajectories during training, learning is restricted to the states visited by the teacher. While
+					effective, this off policy formulation can be brittle: small deviations by the student at inference time may lead it
+					into parts of the sequence space that were never observed during training, a phenomenon known as exposure bias<sup>[2]</sup>.
+					<br><br>
+					
+					In parallel, recent work in post training has explored on policy distillation as a more robust alternative to both SFT
+					and reinforcement learning. Investigations such as Lu and Thinking Machines Lab<sup>[3]</sup> highlight the benefits of
+					allowing the student to sample trajectories from its own policy, demonstrating improved robustness and stability over
+					off policy formulations. More recent methods such as Generalized Knowledge Distillation<sup>[4]</sup> have
+					shown that dense, per token supervision from a stronger teacher during on policy rollouts can significantly improve
+					performance. This approach combines the relevance of on policy learning, which ensures the model is trained on the
+					distribution of states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable
+					rewards characteristic of reinforcement learning frameworks such as Proximal Policy Optimization (PPO)<sup>[5]</sup>.
+					<br><br>
+					
+					Despite these advances, on policy distillation has so far been studied primarily in standard post training settings,
+					such as instruction following or reasoning, where the teacher and student receive identical inputs. To our knowledge, it
+					has not been applied to context distillation, where the central challenge is to transfer behaviors that only emerge when
+					a long context is present for the teacher but absent for the student.
+					<br><br>
+					
+					In this work, we investigate on policy distillation as a training paradigm for context distillation. We ask whether
+					sampling trajectories from the student, while using a teacher equipped with a long context to provide supervision, can
+					more faithfully and efficiently transfer context dependent behaviors than traditional off policy approaches. We also
+					explore how to isolate and distill the incremental effect of the long context, rather than the teacher’s entire policy,
+					and show that on policy methods provide a natural and effective framework for doing so.
+					</div>
 		    <div class="margin-right-block">
 						<!-- Margin note that clarifies some detail #main-content-block for intro section. -->
 		    </div>
@@ -454,11 +470,29 @@
 				<div class="margin-left-block">
 				</div>
 		    <div class="main-content-block">
-						<div class='citation' id="references" style="height:auto"><br>
-							<span style="font-size:16px">References:</span><br><br>
-							<a id="ref_1"></a>[1] <a href="https://en.wikipedia.org/wiki/Allegory_of_the_cave">Allegory of the Cave</a>, Plato, c. 375 BC<br><br>
-							<a id="ref_2"></a>[2] <a href="">A Human-Level AGI</a>, OpenAI, 2025<br><br>
-						</div>
+				<div class="citation" id="references" style="height:auto">
+					<span style="font-size:16px">References:</span><br><br>
+				
+					<a id="ref_1"></a>[1] 
+					<a href="https://arxiv.org/abs/2209.15189">Learning by Distilling Context</a>, 
+					Snell, C., Klein, D., and Zhong, R, 2022<br><br>
+				
+					<a id="ref_2"></a>[2] 
+					<a href="https://arxiv.org/abs/1511.06732">Sequence Level Training with Recurrent Neural Networks</a>, 
+					Ranzato, M., Chopra, S., Auli, M., and Zaremba, W., 2015<br><br>
+								
+					<a id="ref_3"></a>[3] 
+					<a href="https://thinkingmachines.ai/blog/on-policy-distillation/">On-Policy Distillation</a>, 
+					Lu, K., and Thinking Machines Lab, 2025<br><br>
+				
+					<a id="ref_4"></a>[4] 
+					<a href="https://arxiv.org/abs/2306.13649">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes</a>, 
+					Agarwal, S., et al., 2024<br><br>
+				
+					<a id="ref_5"></a>[5] 
+					<a href="https://arxiv.org/abs/2203.02155">Training Language Models to Follow Instructions with Human Feedback</a>, 
+					Ouyang, L., et al., OpenAI, 2022<br><br>
+				</div>
 		    </div>
 		    <div class="margin-right-block">
             <!-- margin notes for reference block here -->
