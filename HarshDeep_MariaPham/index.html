@@ -448,7 +448,27 @@
             <h1>Results</h1>
 				<img src="./images/context_distillation_scaling_math.svg" width=768px />
 				<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
-		    </div>
+				We evaluate how different distillation methods scale on the Hendrycks MATH dataset as a function of both the number of
+				training examples and the LoRA rank used during fine tuning. As shown in Figure 3 (top), off-policy distillation
+				provides the strongest initial gains in the extremely low-data regime, reflecting the benefits of directly imitating
+				high-quality teacher trajectories when only a handful of examples are available. However, its performance plateaus
+				quickly and does not reach teacher-level accuracy. In contrast, on-policy distillation and context-gain on-policy
+				distillation improve more rapidly as training data increases, ultimately matching or surpassing teacher performance when
+				trained on 20–50 samples. The inclusion of two reference curves in this plot helps contextualize these gains: the
+				Untrained Student baseline (dotted purple line) remains at approximately 25% accuracy, illustrating the difficulty of
+				the task without fine-tuning, while the Teacher model (black line) provides a stable upper bound of 70–80% accuracy
+				across all regimes. Together, these baselines highlight the substantial improvements achieved through distillation and
+				underscore the importance of student-generated rollouts for effective context transfer.
+				<br><br>
+				We further examine how performance varies with LoRA rank, which controls the expressiveness of the student’s learned
+				updates. As shown in Figure 3 (bottom), both on-policy approaches benefit consistently from increased rank, with
+				context-gain on-policy distillation outperforming the student baseline across all ranks and approaching teacher-level
+				performance at higher capacities. The Untrained Student baseline again anchors the plot at roughly 25% accuracy,
+				confirming that observed improvements result from the distillation process rather than incidental model behavior. The
+				Teacher model remains a high-performance reference point, indicating the ceiling for what a fully context-equipped model
+				can achieve. Overall, these results demonstrate that on-policy methods not only scale more effectively with data but
+				also with model capacity, making them particularly well suited for transferring long-context reasoning behaviors to
+				smaller or context-limited student models. </div>
 		    <div class="margin-right-block" style="transform: translateY(-40%)">
 				<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH dataset.</strong> Test set accuracy is shown as a function of the number of training examples (log scale). Off-policy distillation performs best in the low-example regime, while on-policy and context-gain on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples increases. Qwen3-8B is used for both the teacher and student models.
 		    </div>
