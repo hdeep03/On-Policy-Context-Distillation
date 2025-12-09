@@ -408,10 +408,20 @@
 					  This reward encourages the student to preserve its base behavior while incorporating only the incremental effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the teacher and student are different models, this formulation helps isolate the contribution of the context itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that are unrelated to the contextual information.
 					  <br><br>
 					  We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and student differ in architecture or scale, and where the student's learning capacity is constrained, such as when using low-rank LoRA adapters.
-					  <br><br>
 			</div>
 		    <div class="margin-right-block">
 		    </div>
+		</div>
+
+
+		<div class="content-margin-container" id="experiments_and_methodology">
+			<div class="margin-left-block">
+			</div>
+			<div class="main-content-block">
+				<h3>Dataset Used</h3>
+				We use the Hendrycks MATH dataset, a challenging benchmark of 12,500 training problems and 5,000 test problems spanning topics such as algebra, geometry, number theory, and calculus, each paired with a detailed step-by-step solution. To support our experiments, we shuffle the full training split with a fixed seed for reproducibility and draw batches from this randomized order, ensuring the student model encounters a diverse mix of problems across training. Although the dataset is large, we train on only a subset determined by our batch size and compute budget, using these varied mathematical tasks to evaluate how well on-policy context distillation strengthens the student model’s multi-step reasoning.			</div>
+			<div class="margin-right-block">
+			</div>
 		</div>
 
 		<div class="content-margin-container">
