@@ -324,7 +324,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<img src="./images/sft_context_distillation.svg" width=512px />
+			<img id="figure1" src="./images/sft_context_distillation.svg" width=512px />
 		</div>
 		<div class="margin-right-block">
 			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that
@@ -342,7 +342,7 @@
 			policy setup, formalized in works such as Snell et al.<sup>[1]</sup>, trajectories are first sampled from a
 			teacher model
 			conditioned on a long context, and the student is trained to imitate these fixed samples as shown in
-			<strong>Figure 1</strong>.
+			<a href="#figure1">Figure 1</a>.
 			Because the student never generates its own trajectories during training, learning is restricted to the
 			states visited by the teacher.
 			This off policy formulation can lead small deviations by the student at inference time may lead it
@@ -396,10 +396,10 @@
 		<div class="main-content-block">
 			<h1>Experiments and Methodology</h1>
 			<h3>On-Policy Context Distillation</h3>
-			<img src="./images/on_policy_context_distillation.svg" width=512px />
+			<img id="figure2" src="./images/on_policy_context_distillation.svg" width=512px />
 			We adopt an on-policy context distillation training scheme in which the student model generates trajectories
 			from its own policy, while a teacher model conditioned on a long context provides supervision on those
-			trajectories. Figure 2 illustrates the overall training loop. <br><br>
+			trajectories. <a href="#figure2">Figure 2</a> illustrates the overall training loop. <br><br>
 			For each input prompt, the student samples a response conditioned only on the base prompt, without access to
 			the long contextual scaffold. The resulting trajectory defines the sequence of states on which training
 			occurs. At each token position, a teacher model, given the same prompt augmented with a long
@@ -618,12 +618,14 @@
 		</div>
 		<div class="main-content-block">
 			<h3 id="dataset">Dataset</h3>
-			We use the Hendrycks MATH dataset, a challenging benchmark containing 7,500 training problems and 5,000 test
+			We use the Hendrycks MATH dataset, introduced in <em>Measuring Mathematical Problem Solving With the
+			MATH Dataset</em> <sup>[7]</sup>, a challenging benchmark containing 7,500 training problems and 5,000 test
 			problems spanning a wide range of topics, including algebra, geometry, number theory, and calculus. Each
 			problem is paired with a detailed solution, making the dataset well suited for evaluating multi-step
 			mathematical reasoning. We choose this dataset because of its difficulty and because prior work has shown
-			that model performance on MATH improves substantially when in-context examples are provided, making it an
-			ideal testbed for studying context-dependent behavior.
+			that model performance on MATH improves substantially when in-context examples are provided, as demonstrated in <em>Many-Shot In-Context Learning</em><sup>[6]</sup>, 
+			making it an
+			ideal testbed for studying context-dependent behavior
 
 			In our setup, we use the full training and test splits, shuffling the entire dataset with a fixed seed to
 			ensure reproducibility. The shuffled problems are then evenly distributed across training batches, giving
@@ -641,7 +643,7 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Results</h1>
-			<img src="./images/context_distillation_scaling_math.svg" width=768px />
+			<img id="figure3" src="./images/context_distillation_scaling_math.svg" width=768px />
 			<img src="./images/lora_rank_context_distillation_math.svg" width=768px />
 			We evaluate how different distillation methods scale on the Hendrycks MATH dataset as a function of both the
 			number of
@@ -731,6 +733,17 @@
 				<a href="https://arxiv.org/abs/2203.02155">Training Language Models to Follow Instructions with Human
 					Feedback</a>,
 				Ouyang, L., et al., OpenAI, 2022<br><br>
+
+				<a id="ref_6"></a>[6]
+				<a href="https://arxiv.org/abs/2404.11018">Many-Shot In-Context Learning</a>,
+				Agarwal, S., et al., Google DeepMind, 2024<br><br>
+
+				<a id="ref_7"></a>[7]
+				<a href="https://arxiv.org/pdf/2103.03874">Measuring Mathematical Problem Solving With the
+					MATH Dataset</a>,
+				Hendrycks, D., et al., UC Berkeley, 2021<br><br>
+
+
 			</div>
 		</div>
 		<div class="margin-right-block">
