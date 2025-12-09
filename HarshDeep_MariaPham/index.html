@@ -84,7 +84,7 @@
 	}
 
 	h1 {
-		font-size: 18px;
+		font-size: 24px;
 		margin-top: 4px;
 		margin-bottom: 10px;
 	}
@@ -227,7 +227,8 @@
           <div style="position:fixed; max-width:inherit; top:max(20%,120px)">
               <b style="font-size:16px">Outline</b><br><br>
               <a href="#intro">Introduction</a><br><br>
-              <a href="#does_x_do_y">Does X do Y?</a><br><br>
+              <a href="#prior_work">Prior work</a><br><br>
+              <a href="#experiments_and_methodology">Experiments and Methodology</a><br><br>
               <a href="#implications_and_limitations">Implications and limitations</a><br><br>
           </div>
 				</div>
@@ -245,47 +246,153 @@
 				</div>
 		    <div class="main-content-block">
 				<h1>Introduction</h1>
-				Large language models (LLMs) exhibit strong in-context learning capabilities: when provided with demonstrations, tools, or long instructional scaffolds in the prompt, they can rapidly adapt to new tasks without parameter updates. However, deploying models with long contexts is expensive and often impractical. Context distillation addresses this gap by training a student model to reproduce the behavior of a teacher that is given a rich context (e.g., few-shot examples), while the student operates with an empty or minimal context.
+
+				Large language models (LLMs) exhibit strong <em>in-context learning</em> abilities: when provided with demonstrations, tools, or long instructional scaffolds in the prompt, they can rapidly adapt to new tasks without any change to their parameters. While powerful, this reliance on long contexts is expensive, brittle, and often impractical in deployment. Every additional example or instruction increases inference cost and latency, and maintaining carefully engineered prompts can be cumbersome.
+
 				<br><br>
-				Most existing approaches to context distillation use off-policy supervised learning: we sample trajectories from a teacher model conditioned on a long context, and then train a student with little or no context to imitate those samples. While effective, this procedure inherits a key limitation of off-policy imitation: the student learns only from states the teacher visits. At inference time, however, the student is the one generating tokens. Small deviations early in generation can lead it into regions of the sequence space that were never represented in the training set, causing sharp performance drops on longer or more sensitive tasks.
-		    </div>
+
+				<em>Context distillation</em> addresses this problem by compressing the information contained in long prompts into a model’s weights. In context distillation, a <em>teacher</em> model is given a rich context (e.g., many-shot demonstrations), while a <em>student</em> model is trained to reproduce the teacher’s behavior using little or no context at all. The goal is to retain the benefits of in-context learning while eliminating the need to supply long prompts at inference time.
+
+				<br><br>
+			</div>
+			<div class="margin-right-block">
+			</div>
+	</div>
+
+		<div class="content-margin-container" id="intro">
+			<div class="margin-left-block">
+			</div>
+		<div class="main-content-block">
+			<img src="./images/sft_context_distillation.svg" width=512px/>
+		</div>
+		<div class="margin-right-block">
+			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that the student receives the teacher's output sequence as input at each step rather than using the student's own generated sequence. 
+		</div>
+	</div>
+
+	<div class="content-margin-container" id="prior_work">
+				<div class="margin-left-block">
+				</div>
+			<div class="main-content-block">
+					<h1>Prior work</h1>
+				Most existing work on context distillation relies on <em>supervised fine-tuning</em> (SFT). In this off-policy setup, trajectories are first sampled from a teacher model conditioned on a long context, and the student is then trained to imitate these fixed teacher-generated samples. Because the student never generates its own trajectories during training, learning is restricted to the states visited by the teacher. While effective, this off-policy formulation can be brittle: small deviations by the student at inference time may lead it into parts of the sequence space that were never observed during training, causing errors to compound over long generations.
+
+				<br><br>
+
+				In parallel, recent work in post-training has explored <em>on-policy distillation</em> as a more robust alternative to both supervised fine-tuning and reinforcement learning. In on-policy distillation, the student samples trajectories from its own policy and receives dense, per-token supervision from a stronger teacher. This approach combines the relevance of on-policy learning, which trains the model on the states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable rewards common in reinforcement learning.
+
+				<br><br>
+
+				Despite these advances, on-policy distillation has so far been studied primarily in standard post-training settings, such as instruction following or reasoning, where the teacher and student receive identical inputs. To our knowledge, it has not been applied to <em>context distillation</em>, where the core challenge is to transfer behaviors that only emerge when a long context is present.
+
+				<br><br>
+
+				In this work, we investigate on-policy distillation as a training paradigm for context distillation. We ask whether sampling trajectories from the student—while using a teacher equipped with a long context to provide supervision—can more faithfully and efficiently transfer context-dependent behaviors than traditional off-policy approaches. We also explore how to isolate and distill the <em>incremental effect</em> of the long context, rather than the teacher’s entire policy, and show that on-policy methods provide a natural and effective framework for doing so.
+				</div>
 		    <div class="margin-right-block">
-						Margin note that clarifies some detail #main-content-block for intro section.
+						<!-- Margin note that clarifies some detail #main-content-block for intro section. -->
 		    </div>
 		</div>
-
-		<div class="content-margin-container" id="does_x_do_y">
+		<div class="content-margin-container" id="experiments_and_methodology">
 				<div class="margin-left-block">
 				</div>
 		    <div class="main-content-block">
-					<h1>Does X do Y?</h1>
-				  It is well known that Y does Y. And this has raised the question does X do Y? Because if Y does Y then it stands to reason that X does Y.
-          But we cannot answer this until we realize the Z implies Y and X can be linked to Z.<br><br>
-
-          Now let's write some math!<br>
-          <center>
-            <math xmlns="http://www.w3.org/1998/Math/MathML">
-              <mrow>
-                <mrow>
-                  <mo>&#x2202;</mo>
-                  <mi>y</mi>
-                </mrow>
-                <mo>/</mo>
-                <mrow>
-                  <mo>&#x2202;</mo>
-                  <mi>x</mi>
-                </mrow>
-              </mrow>
-              <mo>=</mo>
-              <mi>x</mi>
-            </math>
-          </center>
-          <br>
-          It's probably best to ask an LLM to help do the web
-          formatting for math. You can tell it "convert this latex equation into MathML: $$\frac{\partial dy}{\partial dx} = x$$"
-          But it took me a few tries. So, if you get frustrated, you can embed an image of the equation, or use other packages for
-          rendering equations on webpages.
-		    </div>
+					<h1>Experiments and Methodology</h1>
+					<h3>On-Policy Context Distillation</h3>
+					We propose on-policy context distillation as a more robust alternative to supervised fine-tuning context distillation. In on-policy context distillation, the student samples trajectories from its own policy and receives dense, per-token supervision from a stronger teacher. This approach combines the relevance of on-policy learning, which trains the model on the states it actually visits, with the sample efficiency of distillation, avoiding the sparse and unstable rewards common in reinforcement learning.
+					<br><br>
+					<img src="./images/on_policy_context_distillation.svg" width=512px/>
+					<h3>Context-Gain Reward Function</h3>
+					We propose a context-gain-based reward function that is more sensitive to the incremental effect of the long context. Specifically, we define the per-token reward as:
+					<br><br>
+					<center>
+						<math xmlns="http://www.w3.org/1998/Math/MathML">
+						  <mrow>
+							<mi>R</mi>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<mo stretchy="false">)</mo>
+							<mo>=</mo>
+					  
+							<mo>-</mo>
+							<mo stretchy="false">[</mo>
+					  
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<mi>&#x3C0;</mi>
+							<msub>
+							  <mi></mi>
+							  <mi>&#x03B8;</mi>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<mo stretchy="false">)</mo>
+					  
+							<mo>-</mo>
+					  
+							<mo stretchy="false">(</mo>
+					  
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<mi>&#x3C0;</mi>
+							<msub>
+							  <mi></mi>
+							  <mrow>
+								<mi>student</mi>
+								<mo>,</mo>
+								<mi>base</mi>
+							  </mrow>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<mo stretchy="false">)</mo>
+					  
+							<mo>+</mo>
+					  
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<mi>&#x3C0;</mi>
+							<msub>
+							  <mi></mi>
+							  <mrow>
+								<mi>teacher</mi>
+								<mo>,</mo>
+								<mi>long</mi>
+							  </mrow>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<mo stretchy="false">)</mo>
+					  
+							<mo>-</mo>
+					  
+							<mi>log</mi>
+							<mo>&#x2061;</mo>
+							<mi>&#x3C0;</mi>
+							<msub>
+							  <mi></mi>
+							  <mrow>
+								<mi>teacher</mi>
+								<mo>,</mo>
+								<mi>short</mi>
+							  </mrow>
+							</msub>
+							<mo stretchy="false">(</mo>
+							<mi>x</mi>
+							<mo stretchy="false">)</mo>
+					  
+							<mo stretchy="false">)</mo>
+					  
+							<mo stretchy="false">]</mo>
+						  </mrow>
+						</math>
+					  </center>
+					  <br>
+					  This reward encourages the student to preserve its base behavior while incorporating only the incremental effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the teacher and student are different models, this formulation helps isolate the contribution of the context itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that are unrelated to the contextual information.
+					  <br><br>
+					  We hypothesize that this reward will outperform the baseline most clearly in settings where the teacher and student differ in architecture or scale, and where the student’s learning capacity is constrained, such as when using low-rank LoRA adapters.
+					  <br><br>
+			</div>
 		    <div class="margin-right-block" style="transform: translate(0%, -100%);"> <!-- you can move the margin notes up and down with translate -->
           Interestingly, Plato also asked if X does Y, in <a href="#ref_1">[1]</a>.
 		    </div>
