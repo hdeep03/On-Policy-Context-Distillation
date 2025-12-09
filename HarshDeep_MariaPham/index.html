@@ -305,7 +305,7 @@
 					<h3>Context-Gain Reward Function</h3>
 					We propose a context-gain-based reward function that is more sensitive to the incremental effect of the long context. Specifically, we define the per-token reward as:
 					<br><br>
-					<center>
+					<div style="text-align: center;">
 						<math xmlns="http://www.w3.org/1998/Math/MathML">
 						  <mrow>
 							<mi>R</mi>
@@ -386,7 +386,7 @@
 							<mo stretchy="false">]</mo>
 						  </mrow>
 						</math>
-					  </center>
+					  </div>
 					  <br>
 					  This reward encourages the student to preserve its base behavior while incorporating only the incremental effect induced by the teacher’s long context, measured relative to a no-context teacher baseline. When the teacher and student are different models, this formulation helps isolate the contribution of the context itself, rather than transferring the teacher’s stylistic preferences or other model-specific artifacts that are unrelated to the contextual information.
 					  <br><br>
