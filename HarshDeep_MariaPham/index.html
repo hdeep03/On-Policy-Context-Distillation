@@ -302,7 +302,7 @@
 
 			Large language models (LLMs) exhibit strong <em>in-context learning</em> abilities: when provided with
 			demonstrations,
-			tools, or long instructional scaffolds in the prompt, they can rapidly adapt to new tasks without any change
+			tools, or detailed instructions in the prompt, they can rapidly adapt to new tasks without any change
 			to their
 			parameters. However, every additional example or instruction increases inference cost and latency.
 
@@ -324,6 +324,7 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
+			<h1>Prior work</h1>
 			<img id="figure1" src="./images/sft_context_distillation.svg" width=512px />
 		</div>
 		<div class="margin-right-block">
@@ -337,9 +338,9 @@
 		<div class="margin-left-block">
 		</div>
 		<div class="main-content-block">
-			<h1>Prior work</h1>
 			Most existing work on context distillation relies on supervised fine tuning (SFT). In this off
-			policy setup, formalized in works such as Snell et al,<sup>[1]</sup> trajectories are first sampled from a
+			policy setup, formalized in works such as Snell et al,<sup>[<a href="#ref_1">1</a>]</sup> trajectories are
+			first sampled from a
 			teacher model
 			conditioned on a long context, and the student is trained to imitate these fixed samples as shown in
 			<a href="#figure1">Figure 1</a>.
@@ -348,12 +349,14 @@
 			This off-policy formulation can lead to small deviations by the student at inference time which may lead it
 			into parts of the sequence space that were never observed during training, a phenomenon known as
 			<em>exposure
-				bias</em>.<sup>[2]</sup>
+				bias</em>.<sup>[<a href="#ref_2">2</a>]</sup>
 			<br><br>
 
 			Recent work in post-training has explored on-policy distillation as a more robust alternative to both SFT
-			and reinforcement learning. Studies such as Lu and Thinking Machines Lab<sup>[3]</sup> and Generalized
-			Knowledge Distillation<sup>[4]</sup> show that allowing the student to sample trajectories from its own
+			and reinforcement learning. Studies such as Lu and Thinking Machines Lab<sup>[<a href="#ref_3">3</a>]</sup>
+			and Generalized
+			Knowledge Distillation<sup>[<a href="#ref_4">4</a>]</sup> show that allowing the student to sample
+			trajectories from its own
 			policy while receiving per-token supervision from a stronger teacher substantially improves stability
 			and robustness. This preserves the relevance of on-policy learning by training on the states the
 			model actually visits, while providing rewards at every step.
@@ -403,7 +406,8 @@
 			the teacher's grading of its own trajectory distribution. This allows the student to
 			internalize behaviors induced by the context while avoiding exposure bias. <br><br>
 
-			Following the approach described in <em>On-Policy Distillation</em><sup>[3]</sup>, we define the per-token
+			Following the approach described in <em>On-Policy Distillation</em><sup>[<a href="#ref_3">3</a>]</sup>, we
+			define the per-token
 			reward as the negative difference between the student’s log-probability and the
 			long-context teacher’s log-probability on the student’s own sampled token. In expectation over student
 			rollouts, this objective corresponds exactly to minimizing the forward KL divergence from the student policy
@@ -588,14 +592,16 @@
 		<div class="main-content-block">
 			<h3>Experimental Setup</h3>
 
-			All models were trained on the Thinking Machines Tinker Platform which allows for training using Low-Rank
-			Adaptation(LoRA)<sup>[9]</sup>. We choose a learning rate of 4e-4 with a linear decay schedule and use the
-			Adam optimizer<sup>[8]</sup>.
+			All models were trained on the Thinking Machines Tinker Platform<sup>[<a href="#ref_10">10</a>]</sup> which allows for training using Low-Rank
+			Adaptation(LoRA)<sup>[<a href="#ref_9">9</a>]</sup>. We choose a learning rate of 4e-4 with a linear decay
+			schedule and use the
+			Adam optimizer<sup>[<a href="#ref_8">8</a>]</sup>.
 
 			<h4>Scaling Context Distillation with Teacher Demonstrations</h4>
 			In our first experiment, we compare off-policy
 			context distillation with on-policy context distillation under the two reward functions introduced above. We
-			use a Qwen3-8B model<sup>[5]</sup> as both the student and the teacher, fine-tuning the student with
+			use a Qwen3-8B model<sup>[<a href="#ref_5">5</a>]</sup> as both the student and the teacher, fine-tuning the
+			student with
 			LoRA rank
 			32. Across runs, we vary only the number of in-context examples provided to the teacher, while the student
 			always receives no demonstrations. The goal of this
@@ -625,13 +631,16 @@
 		<div class="main-content-block">
 			<h3 id="dataset">Dataset</h3>
 			We use the Hendrycks MATH dataset, introduced in <em>Measuring Mathematical Problem Solving With the
-				MATH Dataset</em> <sup>[7]</sup>, a challenging benchmark containing 7,500 training problems and 5,000
+				MATH Dataset</em> <sup>[<a href="#ref_7">7</a>]</sup>, a challenging benchmark containing 7,500 training
+			problems and 5,000
 			test
-			problems spanning a wide range of topics, including algebra, geometry, number theory, and calculus. We choose this dataset because of its difficulty and because prior work has shown
+			problems spanning a wide range of topics, including algebra, geometry, number theory, and calculus. We
+			choose this dataset because of its difficulty and because prior work has shown
 			that model performance on MATH improves substantially when in-context examples are provided, as demonstrated
-			in <em>Many-Shot In-Context Learning</em><sup>[6]</sup>,
+			in <em>Many-Shot In-Context Learning</em><sup>[<a href="#ref_6">6</a>]</sup>,
 			making it an
-			ideal testbed for studying context-dependent behavior. In our setup, we use the full training and test splits.
+			ideal testbed for studying context-dependent behavior. In our setup, we use the full training and test
+			splits.
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -648,10 +657,7 @@
 			<strong>Figure 3: Context distillation scaling with different distillation methods on the Hendrycks MATH
 				dataset.</strong> Test set accuracy is shown as a function of the number of in-context examples provided
 			to the teacher (log
-			scale). Off-policy distillation performs best when distilling from a low-context teacher while on-policy and
-			context-gain
-			on-policy methods improve more rapidly and match or exceed teacher performance as the number of examples
-			increases. Qwen3-8B is used for both the teacher and student models.
+			scale). Qwen3-8B is used for both the teacher and student models.
 		</div>
 	</div>
 
@@ -662,27 +668,26 @@
 		<div class="main-content-block">
 			We evaluate the scaling behavior of different context distillation strategies on the Hendrycks MATH dataset
 			as a function of the number of in-context examples provided to the teacher, as shown in <a
-				href="#figure3">Figure 3</a>. Off-policy distillation achieves the strongest performance when the
-			teacher is given only a
-			small number of in-context examples, reflecting the effectiveness of directly imitating teacher-generated
-			trajectories in the low-context regime. However, its gains saturate quickly as additional examples are
-			supplied to the teacher, indicating diminishing returns as the teacher’s responses become more
-			context-dependent.
-			<br><br>
-			In contrast, both on-policy and context-gain on-policy distillation exhibit slower initial improvements when
-			the teacher has limited contextual information, but scale more favorably as the number of in-context
-			examples increases. With 20–50 in-context examples, these methods approach and in some cases slightly
-			exceed the teacher’s test-set accuracy. This suggests that allowing the student to generate its own
-			trajectories while receiving supervision from a context-augmented teacher becomes increasingly important as
-			the amount of available contextual information grows.
-			<br><br>
-			A likely explanation for this behavior lies in differences in distributional coverage across training
-			strategies. Off-policy distillation relies on a fixed set of teacher-generated trajectories collected under
-			a particular context setting, which provides strong early supervision but may inadequately cover the states
-			encountered by the student as its policy evolves. In contrast, on-policy and context-gain on-policy
-			distillation train directly on student-generated rollouts, ensuring that supervision is applied on the
-			distribution of states actually visited by the student. This alignment between training and inference
-			distributions leads to improved scalability as the teacher’s context becomes richer.
+				href="#figure3">Figure 3</a>. Off-policy distillation performs best when the
+			teacher is given a small number of in-context examples(<10 examples). However, it plateus as more examples
+				are given to the teacher. <br><br>
+				Both on-policy and context-gain on-policy distillation perform better when the teacher is provided a
+				large
+				number of in-context examples.
+				When the teacher is provided with 20–50 in-context examples, these methods approach and in some cases
+				slightly
+				exceed the teacher’s test-set accuracy. This suggests that allowing the student to generate its own
+				trajectories while receiving supervision from a context-augmented teacher becomes increasingly important
+				as
+				the amount of contextual information grows.
+				<br><br>
+				One possible explanation is distribution mismatch. When the teacher is given more context, its behavior
+				improves, but it also becomes more different from the student. Off-policy distillation relies on fixed
+				teacher trajectories, so as this gap grows, the training data no longer reflect the states the student
+				will visit, limiting how much the student can benefit from the stronger teacher. On-policy methods
+				instead supervise the student on its own trajectories, so the teacher’s guidance is applied to the
+				states the student actually encounters. This makes the additional context provided to the teacher more
+				effective and leads to better performance.
 		</div>
 		<div class="margin-right-block" style="transform: translateY(-40%)">
 		</div>
@@ -696,9 +701,9 @@
 		</div>
 		<div class="margin-right-block">
 			<strong>Figure 4: Context distillation scaling with different LoRA ranks.</strong>
-			Test set accuracy is shown as a function of the LoRA rank. The teacher is a frozen Qwen/Qwen3-32B model
+			Test set accuracy is shown as a function of the LoRA rank. The teacher is a frozen Qwen3-32B model
 			provided with
-			a long context(20 in-context examples), and the student is Qwen/Qwen3-8B trained with empty context. We
+			a long context(20 in-context examples), and the student is Qwen3-8B trained with empty context. We
 			compare standard on-policy distillation against our
 			context-gain reward, which isolates the contribution of teacher context by subtracting a no-context
 			baseline.
@@ -710,10 +715,10 @@
 		</div>
 		<div class="main-content-block">
 			We evaluate the effect of reward design under on-policy context distillation while varying the student’s
-			LoRA rank as shown in <a href="#figure4">Figure 4</a>. The teacher is a frozen Qwen/Qwen3-32B model provided
+			LoRA rank as shown in <a href="#figure4">Figure 4</a>. The teacher is a frozen Qwen3-32B model provided
 			with
 			a long context, and the student is
-			Qwen/Qwen3-8B trained with empty context. We compare standard on-policy distillation against our
+			Qwen3-8B trained with empty context. We compare standard on-policy distillation against our
 			context-gain reward, which isolates the contribution of teacher context by subtracting a no-context
 			baseline.
 			<br><br>
@@ -721,23 +726,21 @@
 			suggesting improved sample efficiency in the most capacity-constrained setting. However, as the LoRA rank
 			increases, standard on-policy distillation consistently outperforms the context-gain variant. At rank 16,
 			standard on-policy reaches 56.8% accuracy compared to 45.4% for context-gain on-policy, and this gap
-			persists at rank 32 (58.1% vs. 47.7%). Neither method approaches teacher performance (75.5%), though both
-			substantially outperform the untrained student baseline (22.7%).
+			persists at rank 32 (58.1% vs. 47.7%).
 			<br><br>
 			We initially hypothesized that the context-gain reward would outperform standard on-policy distillation at
 			low LoRA ranks. Since this reward explicitly isolates the effect of the teacher’s context by suppressing
 			style and base-model behavior, it provides a more targeted learning signal that should be
-			well-suited to capacity-limited adaptation.
-			<br><br>
-			However, while context-gain on-policy does outperform standard on-policy at the smallest LoRA rank (8), this
+			well-suited to capacity-limited adaptation. However, while context-gain on-policy does outperform standard
+			on-policy at the smallest LoRA rank (8), this
 			advantage does not persist as capacity increases, and the gap quickly reverses.
 			<br><br>
-			We theorize that this occurs because the context-gain reward explicitly discourages the student from
-			absorbing any behavior not
+			We theorize that this occurs because the context-gain reward acts as a regularizer, explicitly discouraging
+			the student from absorbing any behavior not
 			attributable to the teacher’s context. While desirable for discarding style and base-model behavior, this
 			constraint may become
 			overly restrictive as LoRA rank increases. In contrast, standard on-policy distillation allows the student
-			to exploit additional capacity to pick up auxiliary reasoning heuristics or stylistic scaffolding that while
+			to exploit additional capacity to pick up auxiliary reasoning heuristics or stylistic features that while
 			not strictly context-dependent, may still improve performance.
 
 		</div>
@@ -750,21 +753,15 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Conclusion</h1>
-			This work demonstrates that on-policy distillation is an effective and scalable framework for context
+			This work demonstrates that on-policy distillation is an effective framework for context
 			distillation. By training on student-generated trajectories while using a teacher with access to long
-			context for supervision, on-policy methods reduce distributional mismatch and more faithfully transfer
-			behaviors that emerge only under rich contextual scaffolds. As teacher context increases, on-policy
-			distillation continues to yield performance gains, whereas off-policy approaches saturate, indicating a
-			fundamental advantage in settings where context plays a dominant role.
+			context for supervision, on-policy methods reduce exposure bias. As teacher context increases, on-policy
+			distillation continues to yield performance gains, whereas off-policy distillation plateaus.
 			<br><br>
-			We also show that isolating the incremental contribution of context through a context-gain reward can
+			We also show that isolating the contribution of context through a context-gain reward can
 			improve learning when student capacity is severely constrained, but becomes limiting as capacity grows.
-			Standard on-policy distillation more effectively exploits additional model capacity, even when some
+			Standard on-policy distillation more effectively exploits additional model capacity, even though some
 			transferred behaviors are not strictly context dependent.
-			<br><br>
-			Overall, these findings suggest that successful context distillation requires both on-policy training and
-			carefully chosen supervision objectives, with the optimal reward depending on the capacity of the student
-			model.
 
 			<h3>Limitations and Next Steps</h3>
 			Our study explores only two reward formulations for on-policy context distillation. While these capture
@@ -773,7 +770,7 @@
 			<br><br>
 			We use a fixed number of in-context examples per run and do not explore curriculum or adaptive context
 			schedules. Varying the amount or composition of teacher context over training could further improve
-			efficiency and stability.
+			student accuracy.
 			<br><br>
 			Evaluation is limited to the Hendrycks MATH dataset, which emphasizes symbolic reasoning. It remains an open
 			question whether the observed scaling behavior generalizes to other domains such as code generation, tool
@@ -840,6 +837,10 @@
 				<a id="ref_9"></a>[9]
 				<a href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a>,
 				Hu, E., et al., 2021<br><br>
+
+				<a id="ref_10"></a>[10]
+				<a href="https://thinkingmachines.ai/blog/announcing-tinker/">Announcing Tinker</a>,
+				Thinking Machines Lab, 2025<br><br>
 
 
 			</div>
