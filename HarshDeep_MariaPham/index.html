@@ -362,19 +362,20 @@
 			model actually visits, while providing rewards at every step.
 			<br><br>
 
-			Despite these advances, on-policy distillation has primarily been studied in standard post training
-			settings,
-			such as instruction following or reasoning, where the teacher and student receive identical inputs. To our
+			Despite these advances, on-policy distillation has primarily been studied for use in tasks such as
+			strong-to-weak
+			distillation, where a large
+			teacher model and a smaller student model receive
+			identical inputs and the goal is to transfer the teacher's behavior to the student. To our
 			knowledge, it
-			has not been applied to context distillation, where the main challenge is to transfer behaviors that only
-			emerge when
-			a long context is present for the teacher but absent for the student.
+			has not been applied to context distillation, where the goal is to transfer behavior between two models that
+			start from the same checkpoint
+			but differ only in conditioning: a context-rich teacher and a context-free student.
 			<br><br>
-
 			In this work, we investigate on-policy distillation as a training scheme for context distillation. We ask
 			whether
 			sampling trajectories from the student while using a supervising teacher with a long context can
-			more faithfully and efficiently transfer context-dependent behavior when compared to traditional off-policy
+			more efficiently transfer context-dependent behavior when compared to traditional off-policy
 			approaches.
 			We also
 			explore how to isolate the incremental effect of the long context, rather than the teacher’s
@@ -601,7 +602,8 @@
 		<div class="main-content-block">
 			<h3>Experimental Setup</h3>
 
-			All models were trained on the Thinking Machines Tinker Platform<sup>[<a href="#ref_10">10</a>]</sup> which allows for training using Low-Rank
+			All models were trained on the Thinking Machines Tinker Platform<sup>[<a href="#ref_10">10</a>]</sup> which
+			allows for training using Low-Rank
 			Adaptation(LoRA)<sup>[<a href="#ref_9">9</a>]</sup>. We choose a learning rate of 4e-4 with a linear decay
 			schedule and use the
 			Adam optimizer<sup>[<a href="#ref_8">8</a>]</sup>.
@@ -781,7 +783,8 @@
 			schedules. Varying the amount or composition of teacher context over training could further improve
 			student accuracy.
 			<br><br>
-			Evaluation is limited to the Hendrycks MATH dataset, which emphasizes mathematical reasoning. It remains an open
+			Evaluation is limited to the Hendrycks MATH dataset, which emphasizes mathematical reasoning. It remains an
+			open
 			question whether the observed scaling behavior generalizes to other domains such as code generation, tool
 			use, or instruction following.
 			<br><br>
