@@ -262,7 +262,7 @@
 					</td>
 					<td align="center"></td> <!-- empty cell to center the names -->
 					<td align="left">
-						<span style="font-size:17px"><a href="https://www.linkedin.com/in/mar-pham/">Maria
+						<span style="font-size:17px"><a href="https://media.licdn.com/dms/image/v2/D4E03AQEE-XTSongbbQ/profile-displayphoto-crop_800_800/B4EZlE5zyfIQAI-/0/1757797629785?e=1767225600&v=beta&t=19aQlSlABByYANYUujCxLI5IkkQb_5aZM24PBdVo9Vg">Maria
 								Pham</a></span>
 					</td>
 				</tr>
@@ -315,6 +315,7 @@
 			eliminating the need to supply long prompts at inference time.
 
 			<br><br>
+			This raises a natural question: as the amount of contextual information grows, what training scheme most effectively transfers context-induced behavior to a student that never observes that context at inference time?
 		</div>
 		<div class="margin-right-block">
 		</div>
@@ -325,7 +326,7 @@
 		</div>
 		<div class="main-content-block">
 			<h1>Prior work</h1>
-			<img id="figure1" src="./images/sft_context_distillation.svg" width=512px />
+			<img id="figure1" src="./images/sft_context_distillation.svg" width=768px />
 		</div>
 		<div class="margin-right-block">
 			<strong>Figure 1: Supervised Fine-Tuning Context Distillation.</strong> Teacher forcing is used such that
@@ -392,7 +393,7 @@
 		<div class="main-content-block">
 			<h1>Experiments and Methodology</h1>
 			<h3>On-Policy Context Distillation</h3>
-			<img id="figure2" src="./images/on_policy_context_distillation.svg" width=512px />
+			<img id="figure2" src="./images/on_policy_context_distillation.svg" width=768px />
 		</div>
 		<div class="margin-right-block">
 			<strong>Figure 2: On-policy Context Distillation.</strong> A teacher model generates token-level outputs for
@@ -773,6 +774,8 @@
 			improve learning when student capacity is severely constrained, but becomes limiting as capacity grows.
 			Standard on-policy distillation more effectively exploits additional model capacity, even though some
 			transferred behaviors are not strictly context dependent.
+			<br><br>
+
 
 			<h3>Limitations and Next Steps</h3>
 			Our study explores only two reward formulations for on-policy context distillation. While these capture
